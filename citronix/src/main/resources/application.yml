@@ -1,8 +1,8 @@
 spring:
   application:
-    name: RidePilot
+    name: Citronix
   profiles:
-    active: dev
+    active: prod
   jpa:
     hibernate:
       ddl-auto: update
