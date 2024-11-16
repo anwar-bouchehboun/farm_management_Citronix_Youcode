@@ -1,8 +1,8 @@
 spring:
   application:
-    name: Citronix
+    name: citronix
   profiles:
-    active: prod
+    active: dev
   jpa:
     hibernate:
       ddl-auto: update
@@ -12,8 +12,6 @@ spring:
         format_sql: true
   liquibase:
     enabled: false
-
 server:
-  port: 8085
-
+  port: 8086
 

@@ -7,9 +7,3 @@ spring:
   jpa:
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-
-  doc:
-    api-docs:
-      path: /v1/api-docs
-    swagger-ui:
-      path: /swagger-ui.html
