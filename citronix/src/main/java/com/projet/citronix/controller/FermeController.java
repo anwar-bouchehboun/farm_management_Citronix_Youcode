@@ -2,6 +2,7 @@ package com.projet.citronix.controller;
 
 
 import com.projet.citronix.dto.FermeDto;
+import com.projet.citronix.dto.displaydata.FermeData;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.service.impl.FermeService;
 import com.projet.citronix.utilitaire.ResponseMessage;
@@ -26,7 +27,7 @@ public class FermeController {
 
 
     @GetMapping
-    public ResponseEntity<List<FermeDto>> getAllFerme(){
+    public ResponseEntity<List<FermeData>> getAllFerme(){
         log.info("Récupération de tous les femres");
         return ResponseEntity.ok(fermeService.getAllFermes());
 
@@ -36,7 +37,7 @@ public class FermeController {
     public ResponseEntity<FermeDto> creer(@Valid @RequestBody FermeDto fermeDto) {
         log.info("Création d'un nouveau femre");
         if (fermeDto == null) {
-            throw new ValidationException("Les données du chauffeur ne peuvent pas être nulles");
+            throw new ValidationException("Les données du Ferme ne peuvent pas être nulles");
         }
         return ResponseEntity.ok(fermeService.creerFerme(fermeDto));
     }
@@ -66,7 +67,7 @@ public class FermeController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<FermeDto> getById(@PathVariable Long id) {
+    public ResponseEntity<FermeData> getById(@PathVariable Long id) {
         log.info("Récupération du femre avec l'ID: {}", id);
         return fermeService.getFermeById(id)
                 .map(ResponseEntity::ok)
@@ -74,7 +75,7 @@ public class FermeController {
     }
 
     @GetMapping("/rechercheferme")
-    public ResponseEntity<List<FermeDto>> rechercher(
+    public ResponseEntity<List<FermeData>> rechercher(
             @RequestParam(required = false) String nom,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateCreation,
             @RequestParam(required = false) String localisation,

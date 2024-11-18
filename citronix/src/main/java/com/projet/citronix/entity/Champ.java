@@ -1,4 +1,5 @@
 package com.projet.citronix.entity;
+import com.projet.citronix.exception.ValidationException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,17 +37,28 @@ public class Champ {
     private Ferme ferme;
 
 
-    @OneToMany(mappedBy = "champ", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "champ")
     private List<Arbre> arbres;
 
-    @PrePersist
+  /*  @PrePersist
     @PreUpdate
     public void validateChamp() {
-        if (ferme.getSuperficie() / 2 < superficie) {
-            throw new IllegalArgumentException("La superficie du champ ne peut pas dépasser 50% de la superficie de la ferme.");
+        if (ferme != null) {
+            if (ferme.getSuperficie() / 2 < superficie) {
+                throw new ValidationException("La superficie du champ ne peut pas dépasser 50% de la superficie de la ferme");
+            }
+            
+            if (ferme.getChamps() != null && ferme.getChamps().size() >= 10) {
+                throw new ValidationException("La ferme a déjà atteint le nombre maximum de champs (10)");
+            }
         }
     }
+*/
     public boolean isSuperficieValid() {
         return superficie >= 0.1 && superficie <= (ferme.getSuperficie() * 0.5);
+    }
+
+    public boolean isValid() {
+        return isSuperficieValid() && (ferme == null || ferme.getChamps() == null || ferme.getChamps().size() < 10);
     }
 }

@@ -13,8 +13,10 @@ import java.util.List;
 public interface FermeRepository extends JpaRepository<Ferme, Long> {
     
     boolean existsByNom(String nom);
+    @Query("SELECT DISTINCT f FROM Ferme f LEFT JOIN f.champs c")
+    List<Ferme> findAllWithChamps();
     
-    @Query("SELECT f FROM Ferme f WHERE " +
+    @Query("SELECT f FROM Ferme f LEFT JOIN f.champs c WHERE " +
            "f.nom = :nom OR " +
            "f.dateCreation = :dateCreation OR " +
            "f.localisation = :localisation OR " +

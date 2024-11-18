@@ -1,10 +1,13 @@
 package com.projet.citronix.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.projet.citronix.exception.ValidationException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -14,6 +17,8 @@ import java.util.List;
 @Entity
 @Table(name = "fermes")
 @Data
+@Getter 
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -41,13 +46,22 @@ public class Ferme {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateCreation;
 
-    public boolean isValid() {
-        return champs.size() <= 10;
-    }
-
-    @OneToMany(mappedBy = "ferme")
+    @OneToMany(mappedBy = "ferme", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @Size(max = 10, message = "Une ferme ne peut pas avoir plus de 10 champs")
     private List<Champ> champs;
 
     @OneToMany(mappedBy = "ferme")
     private List<Recolte> recoltes;
+
+    @PrePersist
+    @PreUpdate
+    public void validateFerme() {
+        if (champs != null && champs.size() > 10) {
+            throw new ValidationException("Une ferme ne peut pas avoir plus de 10 champs");
+        }
+    }
+
+    public boolean isValid() {
+        return champs == null || champs.size() <= 10;
+    }
 }
