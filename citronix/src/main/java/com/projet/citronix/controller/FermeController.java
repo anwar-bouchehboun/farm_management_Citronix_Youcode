@@ -7,11 +7,12 @@ import com.projet.citronix.service.impl.FermeService;
 import com.projet.citronix.utilitaire.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -70,5 +71,18 @@ public class FermeController {
         return fermeService.getFermeById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/rechercheferme")
+    public ResponseEntity<List<FermeDto>> rechercher(
+            @RequestParam(required = false) String nom,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateCreation,
+            @RequestParam(required = false) String localisation,
+            @RequestParam(required = false) Double superficie) {
+        
+        log.info("Recherche de fermes avec les critères: nom={}, dateCreation={}, localisation={}, superficie={}", 
+                nom, dateCreation, localisation, superficie);
+        
+        return ResponseEntity.ok(fermeService.rechercherFermes(nom, dateCreation, localisation, superficie));
     }
 }

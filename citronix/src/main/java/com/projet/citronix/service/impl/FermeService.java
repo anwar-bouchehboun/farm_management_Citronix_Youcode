@@ -11,6 +11,7 @@ import com.projet.citronix.service.FermeInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,9 +26,9 @@ public class FermeService implements FermeInterface {
 
     @Override
     public FermeDto creerFerme(FermeDto fermeDto) {
-        if (fermeRepository.existsByNom(fermeDto.getNom())) {
+      /*  if (fermeRepository.existsByNom(fermeDto.getNom())) {
             throw new ValidationException("Une ferme avec ce nom existe déjà.");
-        }
+        }*/
         Ferme ferme=fermeMapper.toEntity(fermeDto);
     
         fermeRepository.save(ferme);
@@ -40,9 +41,6 @@ public class FermeService implements FermeInterface {
        fermeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundExceptionHndler("Ferme non trouvée avec l'ID: " + id));
 
-        if (fermeRepository.existsByNom(fermeDto.getNom())) {
-            throw new ValidationException("Une ferme avec ce nom existe déjà.");
-        }
         Ferme fermeToUpdate = fermeMapper.toEntity(fermeDto);
         fermeToUpdate.setId(id);
         
@@ -72,5 +70,13 @@ public class FermeService implements FermeInterface {
 
         fermeRepository.delete(ferme);
 
+    }
+
+    @Override
+    public List<FermeDto> rechercherFermes(String nom, LocalDate dateCreation, String localisation, Double superficie) {
+        return fermeRepository.rechercherFermes(nom, dateCreation, localisation, superficie)
+                .stream()
+                .map(fermeMapper::toDto)
+                .collect(Collectors.toList());
     }
 }
