@@ -47,14 +47,17 @@ public class Arbre {
     @PreUpdate
     public void calculerAgeEtVerifierPeriodePlantation() {
         this.age =  Period.between(datePlantation, LocalDate.now()).getYears();
-
-        int mois = datePlantation.getDayOfMonth();
-        if (mois < 2 || mois > 4) {
-            throw new IllegalArgumentException("Les arbres doivent être plantés entre mars et mai.");
-        }
     }
 
-
+    public double calculerProductiviteAnnuelle() {
+        if (getAge() < 3) {
+            return 2.5;
+        } else if (getAge() >= 3 && getAge() <= 10) {
+            return 12.0;
+        } else {
+            return 20.0;
+        }
+    }
 
     @AssertTrue(message = "L'arbre ne peut être planté qu'entre mars et mai.")
     public boolean isDatePlantationValid() {

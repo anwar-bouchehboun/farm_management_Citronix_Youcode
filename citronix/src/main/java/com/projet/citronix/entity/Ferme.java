@@ -1,5 +1,6 @@
 package com.projet.citronix.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,15 +38,16 @@ public class Ferme {
 
     @PastOrPresent(message = "La date de création doit être dans le passé ou le présent.")
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateCreation;
 
     public boolean isValid() {
         return champs.size() <= 10;
     }
 
-    @OneToMany(mappedBy = "ferme", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ferme")
     private List<Champ> champs;
 
-    @OneToMany(mappedBy = "ferme", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "ferme")
     private List<Recolte> recoltes;
 }
