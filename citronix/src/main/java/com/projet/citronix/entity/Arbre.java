@@ -1,6 +1,6 @@
 package com.projet.citronix.entity;
 
-import com.projet.citronix.enums.TypeArbre;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,12 +26,13 @@ public class Arbre {
     private Long id;
 
     @NotNull(message = "La date de plantation est obligatoire.")
+   /* @MaximumAge
+    @PlantingPeriod
+    *
+    */
+
     @Column(nullable = false)
     private LocalDate datePlantation;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TypeArbre type;
 
     @Transient
     private int age;
@@ -40,7 +41,7 @@ public class Arbre {
     @JoinColumn(name = "champ_id", nullable = false)
     private Champ champ;
 
-    @OneToMany(mappedBy = "arbre", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "arbre")
     private List<DetailRecolte> details;
 
     @PrePersist

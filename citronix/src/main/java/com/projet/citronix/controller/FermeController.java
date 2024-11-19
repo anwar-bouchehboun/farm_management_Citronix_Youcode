@@ -2,7 +2,7 @@ package com.projet.citronix.controller;
 
 
 import com.projet.citronix.dto.FermeDto;
-import com.projet.citronix.dto.displaydata.FermeData;
+import com.projet.citronix.dto.response.FermeData;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.service.impl.FermeService;
 import com.projet.citronix.utilitaire.ResponseMessage;

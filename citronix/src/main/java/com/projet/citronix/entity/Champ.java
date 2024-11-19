@@ -28,7 +28,6 @@ public class Champ {
 
     @Positive(message = "La superficie doit être un nombre positif.")
     @DecimalMin(value = "0.1", message = "La superficie minimale du champ est de 0,1 hectare")
-    @DecimalMax(value = "0.5", message = "Un champ ne peut pas dépasser 50% de la superficie de la ferme")
     @Column(nullable = false)
     private Double superficie;
 
@@ -36,29 +35,19 @@ public class Champ {
     @JoinColumn(name = "ferme_id", nullable = false)
     private Ferme ferme;
 
-
-    @OneToMany(mappedBy = "champ")
+    @OneToMany(mappedBy = "champ",fetch = FetchType.EAGER)
+    @Size(message = "Le nombre d'arbres doit respecter la densité maximale de 100 arbres par hectare")
     private List<Arbre> arbres;
 
-  /*  @PrePersist
-    @PreUpdate
-    public void validateChamp() {
-        if (ferme != null) {
-            if (ferme.getSuperficie() / 2 < superficie) {
-                throw new ValidationException("La superficie du champ ne peut pas dépasser 50% de la superficie de la ferme");
-            }
-            
-            if (ferme.getChamps() != null && ferme.getChamps().size() >= 10) {
-                throw new ValidationException("La ferme a déjà atteint le nombre maximum de champs (10)");
-            }
-        }
-    }
-*/
     public boolean isSuperficieValid() {
         return superficie >= 0.1 && superficie <= (ferme.getSuperficie() * 0.5);
     }
 
+
+
+    
     public boolean isValid() {
-        return isSuperficieValid() && (ferme == null || ferme.getChamps() == null || ferme.getChamps().size() < 10);
+        return isSuperficieValid() && 
+               (ferme == null || ferme.getChamps() == null || ferme.getChamps().size() <10);
     }
 }

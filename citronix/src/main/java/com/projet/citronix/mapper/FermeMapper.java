@@ -1,7 +1,7 @@
 package com.projet.citronix.mapper;
 
 import com.projet.citronix.dto.FermeDto;
-import com.projet.citronix.dto.displaydata.FermeData;
+import com.projet.citronix.dto.response.FermeData;
 import com.projet.citronix.entity.Ferme;
 import org.mapstruct.Mapper;
 

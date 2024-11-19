@@ -1,7 +1,7 @@
 package com.projet.citronix.service;
 
 import com.projet.citronix.dto.ChampDto;
-import com.projet.citronix.dto.displaydata.ChampData;
+import com.projet.citronix.dto.response.ChampData;
 
 import java.util.List;
 import java.util.Optional;

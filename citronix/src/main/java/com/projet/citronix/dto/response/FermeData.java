@@ -1,4 +1,4 @@
-package com.projet.citronix.dto.displaydata;
+package com.projet.citronix.dto.response;
 
 import com.projet.citronix.dto.ChampDto;
 import com.projet.citronix.entity.Ferme;

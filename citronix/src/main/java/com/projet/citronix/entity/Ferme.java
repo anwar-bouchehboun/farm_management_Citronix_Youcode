@@ -50,8 +50,7 @@ public class Ferme {
     @Size(max = 10, message = "Une ferme ne peut pas avoir plus de 10 champs")
     private List<Champ> champs;
 
-    @OneToMany(mappedBy = "ferme")
-    private List<Recolte> recoltes;
+
 
     @PrePersist
     @PreUpdate

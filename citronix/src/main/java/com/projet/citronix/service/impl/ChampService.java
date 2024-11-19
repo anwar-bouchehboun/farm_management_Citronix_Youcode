@@ -2,7 +2,7 @@ package com.projet.citronix.service.impl;
 
 
 import com.projet.citronix.dto.ChampDto;
-import com.projet.citronix.dto.displaydata.ChampData;
+import com.projet.citronix.dto.response.ChampData;
 import com.projet.citronix.entity.Champ;
 import com.projet.citronix.entity.Ferme;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
@@ -12,7 +12,9 @@ import com.projet.citronix.repository.ChampRepository;
 import com.projet.citronix.repository.FermeRepository;
 import com.projet.citronix.service.ChampInterface;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChampService implements ChampInterface {
 
     private final ChampRepository champRepository;
@@ -35,21 +38,16 @@ public class ChampService implements ChampInterface {
                 .orElseThrow(() -> new NotFoundExceptionHndler("Ferme non trouvée avec l'ID: " + champDto.getFermeid()));
         
         Champ champ = convertToEntity(champDto, ferme);
-        
-        if (!champ.isValid()) {
-            if (!champ.isSuperficieValid()) {
-                throw new ValidationException("La superficie doit être entre 0,1 et 50% de la superficie de la ferme");
-            }
-            throw new ValidationException("La ferme a déjà atteint le nombre maximum de champs (10)");
-        }
+
+        validateChampBeforeSave(champ);
         
         Champ savedChamp = champRepository.save(champ);
-        return convertToDto(savedChamp);
+        return champsMapper.champsToDTO(savedChamp);
     }
 
     @Override
     public ChampDto modifierChamp(Long id, ChampDto champDto) {
-        Champ existingChamp = champRepository.findById(id)
+       champRepository.findById(id)
                 .orElseThrow(() -> new NotFoundExceptionHndler("Champ non trouvé avec l'ID: " + id));
         
         Ferme ferme = fermeRepository.findById(champDto.getFermeid())
@@ -66,19 +64,19 @@ public class ChampService implements ChampInterface {
         }
         
         Champ updatedChamp = champRepository.save(champ);
-        return convertToDto(updatedChamp);
+        return champsMapper.champsToDTO(updatedChamp);
     }
 
     @Override
     public Optional<ChampData> getChampById(Long id) {
         return Optional.of(champRepository.findById(id)
-                .map(this::convertToData)
+                .map(ChampData::tochampData)
                 .orElseThrow(() -> new NotFoundExceptionHndler("champ non trouvée avec l'ID: " + id)));
     }
 
     @Override
     public List<ChampData> getAllChamps() {
-        return champRepository.findAll().stream()
+        return champRepository.findAllWith().stream()
                 .map(this::convertToData).collect(Collectors.toList());
     }
     @Override
@@ -115,8 +113,17 @@ public class ChampService implements ChampInterface {
 
     private void validateChampBeforeSave(Champ champ) {
         if (champ.getFerme() != null) {
-            if (champ.getFerme().getSuperficie() / 2 < champ.getSuperficie()) {
-                throw new ValidationException("La superficie du champ ne peut pas dépasser 50% de la superficie de la ferme");
+            double maxSuperficie = champ.getFerme().getSuperficie() * 0.5;
+            System.out.println(maxSuperficie);
+            System.out.println(champ.getFerme().getSuperficie());
+            System.out.println(champ.getSuperficie());
+            if (champ.getSuperficie() > maxSuperficie) {
+
+                throw new ValidationException(String.format(
+                    "La superficie du champ (%.2f) ne peut pas dépasser 50%% de la superficie de la ferme (%.2f)", 
+                    champ.getSuperficie(), 
+                    champ.getFerme().getSuperficie()
+                ));
             }
             
             if (champ.getFerme().getChamps() != null &&

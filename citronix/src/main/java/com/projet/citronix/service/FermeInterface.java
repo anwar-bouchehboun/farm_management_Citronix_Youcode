@@ -1,7 +1,7 @@
 package com.projet.citronix.service;
 
 import com.projet.citronix.dto.FermeDto;
-import com.projet.citronix.dto.displaydata.FermeData;
+import com.projet.citronix.dto.response.FermeData;
 
 import java.time.LocalDate;
 import java.util.List;

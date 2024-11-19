@@ -2,9 +2,7 @@ package com.projet.citronix.controller;
 
 
 import com.projet.citronix.dto.ChampDto;
-import com.projet.citronix.dto.FermeDto;
-import com.projet.citronix.dto.displaydata.ChampData;
-import com.projet.citronix.dto.displaydata.FermeData;
+import com.projet.citronix.dto.response.ChampData;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.service.impl.ChampService;
 import com.projet.citronix.utilitaire.ResponseMessage;
@@ -35,7 +33,7 @@ private final ChampService champService;
     }
     @PostMapping
     public ResponseEntity<ChampDto> creer(@Valid @RequestBody ChampDto champDto) {
-        log.info("Création d'un nouveau femre");
+        log.info("Création d'un nouveau Champ");
         if (champDto == null) {
             throw new ValidationException("Les données du champ ne peuvent pas être nulles");
         }
@@ -44,7 +42,7 @@ private final ChampService champService;
 
     @PutMapping("/{id}/edit")
     public ResponseEntity<ChampDto> modifier(@PathVariable Long id, @Valid @RequestBody ChampDto champDto){
-        log.info("Mise à jour du femre avec l'ID: {}", id);
+        log.info("Mise à jour du champ avec l'ID: {}", id);
         if (id == null) {
             throw new ValidationException("L'ID du champ ne peut pas être nul");
         }
@@ -66,7 +64,7 @@ private final ChampService champService;
 
     @GetMapping("/{id}")
     public ResponseEntity<ChampData> getById(@PathVariable Long id) {
-        log.info("Récupération du femre avec l'ID: {}", id);
+        log.info("Récupération du champ avec l'ID: {}", id);
         return champService.getChampById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

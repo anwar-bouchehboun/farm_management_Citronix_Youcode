@@ -1,33 +1,29 @@
 package com.projet.citronix.service.impl;
 
 
-import com.projet.citronix.dto.ChampDto;
 import com.projet.citronix.dto.FermeDto;
-import com.projet.citronix.dto.displaydata.ChampData;
-import com.projet.citronix.dto.displaydata.FermeData;
+import com.projet.citronix.dto.response.FermeData;
 import com.projet.citronix.entity.Ferme;
-import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
 import com.projet.citronix.mapper.FermeMapper;
 import com.projet.citronix.repository.FermeRepository;
 import com.projet.citronix.service.FermeInterface;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FermeService implements FermeInterface {
 
     private final FermeRepository fermeRepository;
     private final FermeMapper fermeMapper=FermeMapper.INSTANCE;
-
 
 
     @Override
