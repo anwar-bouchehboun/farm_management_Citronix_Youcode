@@ -50,4 +50,13 @@ public class Champ {
         return isSuperficieValid() && 
                (ferme == null || ferme.getChamps() == null || ferme.getChamps().size() <10);
     }
+
+    @AssertTrue(message = "La densité d'arbres dépasse la limite maximale de 100 arbres par hectare")
+    public boolean isDensiteArbresValid() {
+        if (arbres == null || superficie == null) {
+            return true;
+        }
+        double maxArbres = superficie * 100;
+        return arbres.size() <= maxArbres;
+    }
 }

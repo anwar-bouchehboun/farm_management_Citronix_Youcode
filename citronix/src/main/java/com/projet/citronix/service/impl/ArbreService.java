@@ -2,6 +2,7 @@ package com.projet.citronix.service.impl;
 
 import com.projet.citronix.dto.ArbreDto;
 import com.projet.citronix.dto.response.ArbreData;
+import com.projet.citronix.dto.response.ChampData;
 import com.projet.citronix.entity.Arbre;
 import com.projet.citronix.entity.Champ;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
@@ -60,10 +61,12 @@ public class ArbreService implements ArbreInterface {
         return arbreMapper.ArbreToDTO(updatedArbre);
     }
 
+
     @Override
     public Optional<ArbreData> getArbreById(Long id) {
-        return arbreRepository.findById(id)
-                .map(this::convertToData);
+        return Optional.of(arbreRepository.findById(id)
+                .map(this::convertToData)
+                .orElseThrow(() -> new NotFoundExceptionHndler("Arbre non trouvée avec l'ID: " + id)));
     }
 
     @Override
@@ -98,10 +101,14 @@ public class ArbreService implements ArbreInterface {
         if (age > 20) {
             throw new ValidationException("Un arbre ne peut être productif au-delà de 20 ans");
         }
+
     }
 
    private void validatePeriodePlantation(Arbre arbre) {
         int moisPlantation = arbre.getDatePlantation().getMonthValue();
+       if (arbre.getDatePlantation().isBefore(LocalDate.now())) {
+           throw new ValidationException("La date de plantation ne peut pas être antérieure au  date nouveau\n");
+       }
         if (moisPlantation < 3 || moisPlantation > 5) {
             throw new ValidationException("L'arbre ne peut être planté qu'entre mars et mai");
         }
@@ -115,10 +122,37 @@ public class ArbreService implements ArbreInterface {
     }
 
     private ArbreData convertToData(Arbre arbre) {
+
+        double productivite = arbre.calculerProductiviteAnnuelle();
+        String categorie = determinerCategorieAge(arbre.getAge());
+        
         return ArbreData.builder()
                 .datePlantation(arbre.getDatePlantation())
                 .nomChamp(arbre.getChamp().getNom())
                 .superficie(arbre.getChamp().getSuperficie())
+                .age(arbre.getAge())
+                .productiviteParSaison(productivite)
+                .categorieAge(categorie)
                 .build();
+    }
+
+    private double calculerProductivite(int age) {
+        if (age < 3) {
+            return 2.5;
+        } else if (age >= 3 && age <= 10) {
+            return 12.0;
+        } else {
+            return 20.0;
+        }
+    }
+
+    private String determinerCategorieAge(int age) {
+        if (age < 3) {
+            return "Arbre jeune";
+        } else if (age >= 3 && age <= 10) {
+            return "Arbre mature";
+        } else {
+            return "Arbre vieux";
+        }
     }
 }

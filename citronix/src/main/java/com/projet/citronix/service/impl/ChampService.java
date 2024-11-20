@@ -12,7 +12,6 @@ import com.projet.citronix.repository.ChampRepository;
 import com.projet.citronix.repository.FermeRepository;
 import com.projet.citronix.service.ChampInterface;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -114,9 +113,6 @@ public class ChampService implements ChampInterface {
     private void validateChampBeforeSave(Champ champ) {
         if (champ.getFerme() != null) {
             double maxSuperficie = champ.getFerme().getSuperficie() * 0.5;
-            System.out.println(maxSuperficie);
-            System.out.println(champ.getFerme().getSuperficie());
-            System.out.println(champ.getSuperficie());
             if (champ.getSuperficie() > maxSuperficie) {
 
                 throw new ValidationException(String.format(

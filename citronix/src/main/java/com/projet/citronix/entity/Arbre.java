@@ -49,6 +49,9 @@ public class Arbre {
     public void calculerAgeEtVerifierPeriodePlantation() {
         this.age =  Period.between(datePlantation, LocalDate.now()).getYears();
     }
+    public int getAge() {
+        return Period.between(datePlantation, LocalDate.now()).getYears();
+    }
 
     public double calculerProductiviteAnnuelle() {
         if (getAge() < 3) {
@@ -60,14 +63,5 @@ public class Arbre {
         }
     }
 
-    @AssertTrue(message = "L'arbre ne peut être planté qu'entre mars et mai.")
-    public boolean isDatePlantationValid() {
-        return datePlantation.getMonthValue() >= 3 && datePlantation.getMonthValue() <= 5;
-    }
-
-    @AssertTrue(message = "Un arbre ne peut être productif au-delà de 20 ans.")
-    public boolean isAgeValid() {
-        return getAge() <= 20;
-    }
 
 }
