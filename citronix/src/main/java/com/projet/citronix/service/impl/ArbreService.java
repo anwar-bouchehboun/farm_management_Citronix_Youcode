@@ -136,15 +136,6 @@ public class ArbreService implements ArbreInterface {
                 .build();
     }
 
-    private double calculerProductivite(int age) {
-        if (age < 3) {
-            return 2.5;
-        } else if (age >= 3 && age <= 10) {
-            return 12.0;
-        } else {
-            return 20.0;
-        }
-    }
 
     private String determinerCategorieAge(int age) {
         if (age < 3) {

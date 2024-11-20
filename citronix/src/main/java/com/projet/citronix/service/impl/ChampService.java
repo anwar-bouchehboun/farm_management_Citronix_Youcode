@@ -85,13 +85,6 @@ public class ChampService implements ChampInterface {
 
         champRepository.delete(champ);
     }
-    private ChampDto convertToDto(Champ champ) {
-        return ChampDto.builder()
-                .fermeid(champ.getFerme().getId())
-                .nom(champ.getNom())
-                .superficie(champ.getSuperficie())
-                .build();
-    }
 
     private ChampData convertToData(Champ champ){
         return ChampData.builder()
