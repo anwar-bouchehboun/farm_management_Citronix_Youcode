@@ -3,11 +3,9 @@ package com.projet.citronix.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,4 +27,6 @@ public class FermeDto {
     @PastOrPresent(message = "La date de création doit être dans le passé ou le présent.")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateCreation;
+
+
 }

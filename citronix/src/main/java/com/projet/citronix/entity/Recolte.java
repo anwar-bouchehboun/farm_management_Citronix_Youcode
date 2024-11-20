@@ -33,9 +33,6 @@ public class Recolte {
     @PositiveOrZero(message = "La quantité totale doit être positive ou zéro.")
     private Double quantiteTotale;
 
-    @ManyToOne
-    @JoinColumn(name = "ferme_id", nullable = false)
-    private Ferme ferme;
 
     @OneToMany(mappedBy = "recolte", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetailRecolte> details;

@@ -2,66 +2,62 @@ package com.projet.citronix.service.impl;
 
 
 import com.projet.citronix.dto.FermeDto;
+import com.projet.citronix.dto.response.FermeData;
 import com.projet.citronix.entity.Ferme;
-import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
 import com.projet.citronix.mapper.FermeMapper;
 import com.projet.citronix.repository.FermeRepository;
 import com.projet.citronix.service.FermeInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FermeService implements FermeInterface {
 
     private final FermeRepository fermeRepository;
-    private FermeMapper fermeMapper=FermeMapper.INSTANCE;
+    private final FermeMapper fermeMapper=FermeMapper.INSTANCE;
 
 
     @Override
     public FermeDto creerFerme(FermeDto fermeDto) {
-        if (fermeRepository.existsByNom(fermeDto.getNom())) {
-            throw new ValidationException("Une ferme avec ce nom existe déjà.");
-        }
-        Ferme ferme=fermeMapper.toEntity(fermeDto);
-    
+
+        Ferme ferme = fermeMapper.toEntity(fermeDto);
         fermeRepository.save(ferme);
-        return  fermeMapper.toDto(ferme);
+        return fermeMapper.toDto(ferme);
     }
 
     @Override
     public FermeDto modifierFerme(Long id, FermeDto fermeDto) {
-
        fermeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundExceptionHndler("Ferme non trouvée avec l'ID: " + id));
+                
 
-        if (fermeRepository.existsByNom(fermeDto.getNom())) {
-            throw new ValidationException("Une ferme avec ce nom existe déjà.");
-        }
         Ferme fermeToUpdate = fermeMapper.toEntity(fermeDto);
         fermeToUpdate.setId(id);
-        
         fermeRepository.save(fermeToUpdate);
         return fermeMapper.toDto(fermeToUpdate);
     }
 
 
     @Override
-    public Optional<FermeDto> getFermeById(Long id) {
+    public Optional<FermeData> getFermeById(Long id) {
         return Optional.of(fermeRepository.findById(id)
-                .map(fermeMapper::toDto)
+                .map(FermeData::toFemreData)
                 .orElseThrow(() -> new NotFoundExceptionHndler("Ferme non trouvée avec l'ID: " + id)));
     }
 
     @Override
-    public List<FermeDto> getAllFermes() {
-        return   fermeRepository.findAll().stream()
-                .map(fermeMapper::toDto)
+    public List<FermeData> getAllFermes() {
+        return   fermeRepository.findAllWithChamps().stream()
+                .map(fermeMapper::toDtoData)
                 .collect(Collectors.toList());
     }
 
@@ -73,4 +69,14 @@ public class FermeService implements FermeInterface {
         fermeRepository.delete(ferme);
 
     }
+
+    @Override
+    public List<FermeData> rechercherFermes(String nom, LocalDate dateCreation, String localisation, Double superficie) {
+        return fermeRepository.rechercherFermes(nom, dateCreation, localisation, superficie)
+                .stream()
+                .map(fermeMapper::toDtoData)
+                .collect(Collectors.toList());
+    }
+
+
 }

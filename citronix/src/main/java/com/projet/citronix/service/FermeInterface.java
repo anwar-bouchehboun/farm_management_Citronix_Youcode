@@ -1,7 +1,9 @@
 package com.projet.citronix.service;
 
 import com.projet.citronix.dto.FermeDto;
+import com.projet.citronix.dto.response.FermeData;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,10 +13,12 @@ public interface FermeInterface {
     
     FermeDto modifierFerme(Long id,FermeDto fermeDto);
     
-    Optional<FermeDto> getFermeById(Long id);
+    Optional<FermeData> getFermeById(Long id);
     
-    List<FermeDto> getAllFermes();
+    List<FermeData> getAllFermes();
     
     void supprimerFerme(Long id);
+
+    List<FermeData> rechercherFermes(String nom, LocalDate dateCreation, String localisation, Double superficie);
 
 }
