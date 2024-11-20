@@ -11,7 +11,11 @@ import com.projet.citronix.mapper.ArbreMapper;
 import com.projet.citronix.repository.ArbreRepository;
 import com.projet.citronix.repository.ChampRepository;
 import com.projet.citronix.service.ArbreInterface;
+import com.projet.citronix.utilitaire.ArbreSearchCriteria;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,6 +85,22 @@ public class ArbreService implements ArbreInterface {
         Arbre arbre = arbreRepository.findById(id)
                 .orElseThrow(() -> new NotFoundExceptionHndler("Arbre non trouvé avec l'ID: " + id));
         arbreRepository.delete(arbre);
+    }
+
+    @Override
+    public Page<ArbreData> getAllArbresWithPagination(ArbreSearchCriteria criteria) {
+        int page = criteria.getPage() != null ? criteria.getPage() : 0;
+        int size = criteria.getSize() != null ? criteria.getSize() : 3;
+        Pageable pageable = PageRequest.of(page, size);
+        
+        Page<Arbre> arbrePage;
+        if (criteria.getChampId() != null) {
+            arbrePage = arbreRepository.findAllByChampId(criteria.getChampId(), pageable);
+        } else {
+            arbrePage = arbreRepository.findAllWithPagination(pageable);
+        }
+        
+        return arbrePage.map(this::convertToData);
     }
 
     private void validateDensiteArbres(Champ champ) {

@@ -6,9 +6,11 @@ import com.projet.citronix.dto.response.ArbreData;
 import com.projet.citronix.dto.response.ChampData;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.service.impl.ArbreService;
+import com.projet.citronix.utilitaire.ArbreSearchCriteria;
 import com.projet.citronix.utilitaire.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,5 +75,19 @@ public class ArbreController {
         return ResponseEntity.ok(ResponseMessage.deleteSuccess("La Arbre", id));
     }
 
+    @GetMapping("/paginated")
+    public ResponseEntity<Page<ArbreData>> getAllArbresPaginated(
+        @RequestParam(required = false) Long champId,
+        @RequestParam(defaultValue = "0") Integer page,
+        @RequestParam(defaultValue = "3") Integer size
+    ) {
+        ArbreSearchCriteria criteria = ArbreSearchCriteria.builder()
+            .champId(champId)
+            .page(page)
+            .size(size)
+            .build();
+        
+        return ResponseEntity.ok(arbreService.getAllArbresWithPagination(criteria));
+    }
 
 }

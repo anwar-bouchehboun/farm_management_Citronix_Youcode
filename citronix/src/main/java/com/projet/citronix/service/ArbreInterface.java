@@ -2,6 +2,8 @@ package com.projet.citronix.service;
 
 import com.projet.citronix.dto.ArbreDto;
 import com.projet.citronix.dto.response.ArbreData;
+import com.projet.citronix.utilitaire.ArbreSearchCriteria;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +19,6 @@ public interface ArbreInterface {
     List<ArbreData> getAllArbres();
 
     void supprimerArbre(Long id);
+
+    Page<ArbreData> getAllArbresWithPagination(ArbreSearchCriteria criteria);
 }
