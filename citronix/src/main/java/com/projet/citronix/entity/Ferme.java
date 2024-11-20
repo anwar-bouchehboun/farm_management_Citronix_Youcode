@@ -37,7 +37,7 @@ public class Ferme {
     private String localisation;
 
     @Positive(message = "La superficie doit être un nombre positif.")
-    @DecimalMin(value = "0.1", message = "La superficie doit être d'au moins 0.1 hectare.")
+    @DecimalMin(value = "0.2", message = "La superficie doit être d'au moins 0.2 hectare.")
     @Column(nullable = false)
     private Double superficie;
 

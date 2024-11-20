@@ -1,8 +1,7 @@
 package com.projet.citronix.dto;
 
 
-import com.projet.citronix.validation.MaximumAge;
-import com.projet.citronix.validation.PlantingPeriod;
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,8 +17,7 @@ public class ArbreDto {
 
 
     @NotNull(message = "La date de plantation est obligatoire.")
-    @MaximumAge
-    @PlantingPeriod
+
     @Column(nullable = false)
     private LocalDate datePlantation;
 

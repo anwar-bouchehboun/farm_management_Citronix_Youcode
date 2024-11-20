@@ -5,10 +5,12 @@ import com.projet.citronix.dto.FermeDto;
 import com.projet.citronix.dto.response.FermeData;
 import com.projet.citronix.entity.Ferme;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
+import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.mapper.FermeMapper;
 import com.projet.citronix.repository.FermeRepository;
 import com.projet.citronix.service.FermeInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +30,16 @@ public class FermeService implements FermeInterface {
 
     @Override
     public FermeDto creerFerme(FermeDto fermeDto) {
-
+        validateSuperficie(fermeDto.getSuperficie());
         Ferme ferme = fermeMapper.toEntity(fermeDto);
         fermeRepository.save(ferme);
         return fermeMapper.toDto(ferme);
+    }
+
+    private void validateSuperficie(Double superficie) {
+        if (superficie == null || superficie < 0.2) {
+            throw new ValidationException("La superficie doit être d'au moins 0.2 hectare");
+        }
     }
 
     @Override
@@ -55,8 +63,8 @@ public class FermeService implements FermeInterface {
     }
 
     @Override
-    public List<FermeData> getAllFermes() {
-        return   fermeRepository.findAllWithChamps().stream()
+    public List<FermeData> getAllFermes(Pageable pageable) {
+        return   fermeRepository.findAllWithChamps(pageable).stream()
                 .map(fermeMapper::toDtoData)
                 .collect(Collectors.toList());
     }

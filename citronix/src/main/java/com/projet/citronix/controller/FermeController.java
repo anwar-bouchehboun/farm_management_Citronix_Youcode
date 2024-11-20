@@ -8,6 +8,8 @@ import com.projet.citronix.service.impl.FermeService;
 import com.projet.citronix.utilitaire.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +29,14 @@ public class FermeController {
 
 
     @GetMapping
-    public ResponseEntity<List<FermeData>> getAllFerme(){
+    public ResponseEntity<List<FermeData>> getAllFerme(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String direction){
         log.info("Récupération de tous les femres");
-        return ResponseEntity.ok(fermeService.getAllFermes());
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        return ResponseEntity.ok(fermeService.getAllFermes(PageRequest.of(page, size, Sort.by(sortDirection, sort))));
 
 
     }

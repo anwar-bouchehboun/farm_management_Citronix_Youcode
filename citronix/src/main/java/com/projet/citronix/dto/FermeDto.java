@@ -21,7 +21,7 @@ public class FermeDto {
     private String localisation;
 
     @Positive(message = "La superficie doit être un nombre positif.")
-    @DecimalMin(value = "0.1", message = "La superficie doit être d'au moins 0.1 hectare.")
+    @DecimalMin(value = "0.2", message = "La superficie doit être d'au moins 0.2 hectare.")
     private Double superficie;
 
     @PastOrPresent(message = "La date de création doit être dans le passé ou le présent.")

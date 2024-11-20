@@ -31,9 +31,9 @@ public class Recolte {
     private LocalDate dateRecolte;
 
     @PositiveOrZero(message = "La quantité totale doit être positive ou zéro.")
-    private Double quantiteTotale;
+    private Double quantiteTotale = 0.0;
 
 
-    @OneToMany(mappedBy = "recolte", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "recolte",fetch = FetchType.EAGER)
     private List<DetailRecolte> details;
 }

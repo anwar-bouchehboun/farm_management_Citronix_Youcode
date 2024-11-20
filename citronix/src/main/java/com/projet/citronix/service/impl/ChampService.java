@@ -12,6 +12,7 @@ import com.projet.citronix.repository.ChampRepository;
 import com.projet.citronix.repository.FermeRepository;
 import com.projet.citronix.service.ChampInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,8 +75,8 @@ public class ChampService implements ChampInterface {
     }
 
     @Override
-    public List<ChampData> getAllChamps() {
-        return champRepository.findAllWith().stream()
+    public List<ChampData> getAllChamps(Pageable pageable) {
+        return champRepository.findAllWith(pageable).stream()
                 .map(this::convertToData).collect(Collectors.toList());
     }
     @Override

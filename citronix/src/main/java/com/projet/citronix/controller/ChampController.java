@@ -8,6 +8,8 @@ import com.projet.citronix.service.impl.ChampService;
 import com.projet.citronix.utilitaire.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +27,16 @@ private final ChampService champService;
 
 
     @GetMapping
-    public ResponseEntity<List<ChampData>> getAllFerme(){
+    public ResponseEntity<List<ChampData>> getAllFerme(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String direction){
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
         log.info("Récupération de tous les champ");
-        return ResponseEntity.ok(champService.getAllChamps());
+
+        return ResponseEntity.ok(champService.getAllChamps(PageRequest.of(page, size, Sort.by(sortDirection, sort))));
 
 
     }

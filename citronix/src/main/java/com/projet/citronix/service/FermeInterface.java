@@ -2,6 +2,7 @@ package com.projet.citronix.service;
 
 import com.projet.citronix.dto.FermeDto;
 import com.projet.citronix.dto.response.FermeData;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,7 +16,7 @@ public interface FermeInterface {
     
     Optional<FermeData> getFermeById(Long id);
     
-    List<FermeData> getAllFermes();
+    List<FermeData> getAllFermes(Pageable pageable);
     
     void supprimerFerme(Long id);
 

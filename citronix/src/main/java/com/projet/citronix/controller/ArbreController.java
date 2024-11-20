@@ -1,9 +1,7 @@
 package com.projet.citronix.controller;
 
 import com.projet.citronix.dto.ArbreDto;
-import com.projet.citronix.dto.ChampDto;
 import com.projet.citronix.dto.response.ArbreData;
-import com.projet.citronix.dto.response.ChampData;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.service.impl.ArbreService;
 import com.projet.citronix.utilitaire.ArbreSearchCriteria;
@@ -11,6 +9,8 @@ import com.projet.citronix.utilitaire.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +29,14 @@ public class ArbreController {
 
 
     @GetMapping
-    public ResponseEntity<List<ArbreData>> getAllArbre(){
+    public ResponseEntity<List<ArbreData>> getAllArbre(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String direction) {
         log.info("Récupération de tous les Arbre");
-        return ResponseEntity.ok(arbreService.getAllArbres());
-
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        return ResponseEntity.ok(arbreService.getAllArbres(PageRequest.of(page, size, Sort.by(sortDirection, sort))));
     }
 
     @PostMapping

@@ -5,7 +5,10 @@ import com.projet.citronix.entity.Arbre;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-@Mapper
+import org.springframework.stereotype.Component;
+
+@Component
+@Mapper(componentModel = "spring")
 public interface ArbreMapper {
 
 
@@ -14,7 +17,6 @@ public interface ArbreMapper {
 
     ArbreDto ArbreToDTO(Arbre arbre);
     @Mapping(source = "champid", target = "champ.id")
-
     Arbre arbreDTOToEntity(ArbreDto arbreDto);
 
 

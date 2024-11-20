@@ -1,6 +1,8 @@
 package com.projet.citronix.repository;
 
 import com.projet.citronix.entity.Ferme;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,10 +13,11 @@ import java.util.List;
 
 @Repository
 public interface FermeRepository extends JpaRepository<Ferme, Long> {
-    
-    boolean existsByNom(String nom);
-    @Query("SELECT DISTINCT f FROM Ferme f LEFT JOIN f.champs c")
-    List<Ferme> findAllWithChamps();
+
+
+    @Query(value = "SELECT DISTINCT f FROM Ferme f LEFT JOIN FETCH f.champs c",
+            countQuery = "SELECT COUNT(f) FROM Ferme f")
+    Page<Ferme> findAllWithChamps(Pageable pageable);
     
     @Query("SELECT f FROM Ferme f LEFT JOIN f.champs c WHERE " +
            "f.nom = :nom OR " +

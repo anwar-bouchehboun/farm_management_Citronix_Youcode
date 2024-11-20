@@ -74,8 +74,8 @@ public class ArbreService implements ArbreInterface {
     }
 
     @Override
-    public List<ArbreData> getAllArbres() {
-        return arbreRepository.findAll().stream()
+    public List<ArbreData> getAllArbres(Pageable pageable) {
+        return arbreRepository.findAll(pageable).stream()
                 .map(this::convertToData)
                 .collect(Collectors.toList());
     }
