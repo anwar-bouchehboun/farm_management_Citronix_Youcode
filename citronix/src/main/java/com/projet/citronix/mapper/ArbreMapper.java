@@ -1,6 +1,7 @@
 package com.projet.citronix.mapper;
 
 import com.projet.citronix.dto.ArbreDto;
+import com.projet.citronix.dto.response.ArbreData;
 import com.projet.citronix.entity.Arbre;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,5 +20,5 @@ public interface ArbreMapper {
     @Mapping(source = "champid", target = "champ.id")
     Arbre arbreDTOToEntity(ArbreDto arbreDto);
 
-
+   ArbreData arbreTOdata(Arbre arbre);
 }
