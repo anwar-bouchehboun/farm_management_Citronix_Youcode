@@ -60,7 +60,4 @@ public class Ferme {
         }
     }
 
-    public boolean isValid() {
-        return champs == null || champs.size() <= 10;
-    }
 }

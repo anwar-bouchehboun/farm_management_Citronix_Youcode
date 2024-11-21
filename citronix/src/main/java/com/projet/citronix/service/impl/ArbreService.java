@@ -5,7 +5,6 @@ import com.projet.citronix.dto.response.ArbreData;
 import com.projet.citronix.dto.response.ChampData;
 import com.projet.citronix.entity.Arbre;
 import com.projet.citronix.entity.Champ;
-import com.projet.citronix.enums.CategorieAge;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.mapper.ArbreMapper;
@@ -104,6 +103,36 @@ public class ArbreService implements ArbreInterface {
         return arbrePage.map(this::convertToData);
     }
 
+    private void validateDensiteArbres(Champ champ) {
+        if (champ.getArbres() != null) {
+            double maxArbres = champ.getSuperficie() * 100; // 100 arbres par hectare
+            if (champ.getArbres().size() >= maxArbres) {
+                throw new ValidationException(String.format(
+                    "Densité maximale atteinte (%d arbres pour %.2f hectares)", 
+                    champ.getArbres().size(), 
+                    champ.getSuperficie()
+                ));
+            }
+        }
+    }
+
+   private void validateAge(Arbre arbre) {
+        int age = Period.between(arbre.getDatePlantation(), LocalDate.now()).getYears();
+        if (age > 20) {
+            throw new ValidationException("Un arbre ne peut être productif au-delà de 20 ans");
+        }
+
+    }
+
+   private void validatePeriodePlantation(Arbre arbre) {
+        int moisPlantation = arbre.getDatePlantation().getMonthValue();
+       if (arbre.getDatePlantation().isBefore(LocalDate.now())) {
+           throw new ValidationException("La date de plantation ne peut pas être antérieure au  date nouveau\n");
+       }
+        if (moisPlantation < 3 || moisPlantation > 5) {
+            throw new ValidationException("L'arbre ne peut être planté qu'entre mars et mai");
+        }
+    }
 
     private Arbre convertToEntity(ArbreDto arbreDto, Champ champ) {
         Arbre arbre = arbreMapper.arbreDTOToEntity(arbreDto);
@@ -118,7 +147,6 @@ public class ArbreService implements ArbreInterface {
         String categorie = determinerCategorieAge(arbre.getAge());
         
         return ArbreData.builder()
-                .id(arbre.getId())
                 .datePlantation(arbre.getDatePlantation())
                 .nomChamp(arbre.getChamp().getNom())
                 .superficie(arbre.getChamp().getSuperficie())
@@ -128,48 +156,14 @@ public class ArbreService implements ArbreInterface {
                 .build();
     }
 
-//valide Detrmine age
+
     private String determinerCategorieAge(int age) {
         if (age < 3) {
-            return CategorieAge.JEUNE.name();
+            return "Arbre jeune";
         } else if (age >= 3 && age <= 10) {
-            return CategorieAge.MATURE.name();
+            return "Arbre mature";
         } else {
-            return CategorieAge.VIEUX.name();
-        }
-    }
-
-
-
-    private void validateDensiteArbres(Champ champ) {
-        if (champ.getArbres() != null) {
-            double maxArbres = champ.getSuperficie() * 100; // 100 arbres par hectare
-            if (champ.getArbres().size() >= maxArbres) {
-                throw new ValidationException(String.format(
-                        "Densité maximale atteinte (%d arbres pour %.2f hectares)",
-                        champ.getArbres().size(),
-                        champ.getSuperficie()
-                ));
-            }
-        }
-    }
-
-    //validation
-    private void validateAge(Arbre arbre) {
-        int age = Period.between(arbre.getDatePlantation(), LocalDate.now()).getYears();
-        if (age > 20) {
-            throw new ValidationException("Un arbre ne peut être productif au-delà de 20 ans");
-        }
-
-    }
-
-    private void validatePeriodePlantation(Arbre arbre) {
-        int moisPlantation = arbre.getDatePlantation().getMonthValue();
-        if (arbre.getDatePlantation().isBefore(LocalDate.now())) {
-            throw new ValidationException("La date de plantation ne peut pas être antérieure au  date nouveau\n");
-        }
-        if (moisPlantation < 3 || moisPlantation > 5) {
-            throw new ValidationException("L'arbre ne peut être planté qu'entre mars et mai");
+            return "Arbre vieux";
         }
     }
 }

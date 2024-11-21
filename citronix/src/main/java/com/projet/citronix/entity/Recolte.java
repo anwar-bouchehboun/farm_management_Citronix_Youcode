@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Table(name = "recoltes")
@@ -39,4 +40,19 @@ public class Recolte {
 
     @OneToMany(mappedBy = "recolte",fetch = FetchType.LAZY)
     private List<Vente> ventes;
+
+    @PrePersist
+    public void beforeSave() {
+        if (this.quantiteTotale == null) {
+            this.quantiteTotale = 0.0;
+        }
+    }
+
+    public void addDetailRecolte(DetailRecolte detail) {
+        if (details == null) {
+            details = new ArrayList<>();
+        }
+        details.add(detail);
+        this.quantiteTotale += detail.getQuantiteParArbre();
+    }
 }

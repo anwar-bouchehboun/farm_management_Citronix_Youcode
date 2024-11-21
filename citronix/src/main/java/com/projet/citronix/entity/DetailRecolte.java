@@ -29,4 +29,17 @@ public class DetailRecolte {
     @ManyToOne
     @JoinColumn(name = "arbre_id", nullable = false)
     private Arbre arbre;
+
+    @PrePersist
+    public void beforeSave() {
+        if (this.recolte != null) {
+            Double ancienneQuantite = this.recolte.getQuantiteTotale();
+            if (ancienneQuantite == null) {
+                ancienneQuantite = 0.0;
+            }
+            this.recolte.setQuantiteTotale(ancienneQuantite + this.quantiteParArbre);
+        }
+    }
+
+  
 }

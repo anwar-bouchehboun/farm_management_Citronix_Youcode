@@ -1,5 +1,7 @@
 package com.projet.citronix.dto.response;
 
+import com.projet.citronix.entity.Arbre;
+import com.projet.citronix.enums.CategorieAge;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -17,16 +19,5 @@ public class ArbreData {
     private double productiviteParSaison;
     private String categorieAge;
 
-    public void calculerProductiviteEtCategorie() {
-        if (age < 3) {
-            this.productiviteParSaison = 2.5;
-            this.categorieAge = "Arbre jeune";
-        } else if (age <= 10) {
-            this.productiviteParSaison = 12.0;
-            this.categorieAge = "Arbre mature";
-        } else {
-            this.productiviteParSaison = 20.0;
-            this.categorieAge = "Arbre vieux";
-        }
-    }
+
 }

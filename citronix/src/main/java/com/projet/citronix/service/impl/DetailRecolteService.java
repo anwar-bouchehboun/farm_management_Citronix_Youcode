@@ -6,7 +6,6 @@ import com.projet.citronix.dto.response.DetaailRecolteData;
 import com.projet.citronix.entity.Arbre;
 import com.projet.citronix.entity.DetailRecolte;
 import com.projet.citronix.entity.Recolte;
-import com.projet.citronix.enums.CategorieAge;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.mapper.ArbreMapper;
@@ -37,7 +36,7 @@ public class DetailRecolteService implements DetailRecolteInterface {
     private final RecolteService recolteService;
 
     @Override
-
+    @Transactional
     public DetailsRecolteDto creerDetailsRecolte(DetailsRecolteDto detailsRecolteDto) {
         Recolte recolte = recolteRepository.findById(detailsRecolteDto.getRecolteid())
                 .orElseThrow(() -> new NotFoundExceptionHndler("Récolte non trouvée"));
@@ -51,17 +50,15 @@ public class DetailRecolteService implements DetailRecolteInterface {
 
         validateArbreSaison(arbre.getId(), recolte);
 
-        validateProductivite(arbre,detailsRecolteDto.getQuantiteParArbre());
-
 
         DetailRecolte detailRecolte = detailsMapper.toEntity(detailsRecolteDto);
         detailRecolte.setArbre(arbre);
-
+        detailRecolte.setQuantiteParArbre(validateProductivite(arbre));
         detailRecolte.setRecolte(recolte);
 
         DetailRecolte savedDetail = detailRecolteRepository.save(detailRecolte);
         
-        recolteService.updateQuantiteTotal(detailsRecolteDto.getRecolteid());
+      // recolteService.updateQuantiteTotal(detailsRecolteDto.getRecolteid());
         
         return detailsMapper.toDto(savedDetail);
     }
@@ -78,14 +75,11 @@ public class DetailRecolteService implements DetailRecolteInterface {
 
         validateArbreAge(arbre);
         validateChampSaison(arbre.getId(),existingDetail.getRecolte());
-        validateProductivite(arbre, detailsRecolteDto.getQuantiteParArbre());
-
-        existingDetail.setQuantiteParArbre(detailsRecolteDto.getQuantiteParArbre());
         existingDetail.setArbre(arbre);
 
         DetailRecolte updatedDetail = detailRecolteRepository.save(existingDetail);
-        recolteService.updateQuantiteTotal(existingDetail.getRecolte().getId());
-        
+       recolteService.updateQuantiteTotal(existingDetail.getRecolte().getId());
+
         return detailsMapper.toDto(updatedDetail);
     }
 
@@ -123,14 +117,20 @@ public class DetailRecolteService implements DetailRecolteInterface {
     }
 
     //validation for Ajout et modifier
-    public void   validateProductivite(Arbre arbre, Double getQuantiteParArbre){
-        ArbreData arbreData=arbreMapper.arbreTOdata(arbre);
-        arbreData.calculerProductiviteEtCategorie();
-        
-        if (getQuantiteParArbre >  arbreData.getProductiviteParSaison()) {
-            throw new ValidationException("Quantité invalide. Maximum autorisé: " +  arbreData.getProductiviteParSaison() + " kg pour un " + arbreData.getCategorieAge() + " (" + arbreData.getAge() + " ans)");
+    public Double validateProductivite(Arbre arbre) {
+        if (arbre.getAge() < 3) {
+            return 2.5;
+        } else if (arbre.getAge() >= 3 && arbre.getAge() < 10) {
+            return 12.0;
+        } else if (arbre.getAge() >= 10 && arbre.getAge() < 20) {
+            return 20.0;
+        } else {
+            throw new ValidationException(
+                    String.format("L'arbre ne peut pas être récolté à l'âge de %d ans.", arbre.getAge())
+            );
         }
     }
+
 
     private void validateChampSaison(Long champId, Recolte recolte) {
         boolean champDejaRecolte = detailRecolteRepository.existsByChampAndSaisonAndDifferentRecolte(
