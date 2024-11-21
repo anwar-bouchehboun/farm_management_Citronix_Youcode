@@ -47,7 +47,7 @@ public class DetailRecolteService implements DetailRecolteInterface {
 
         validateArbreAge(arbre);
 
-      //  validateChampSaison(arbre.getChamp().getId(), recolte);
+        validateChampSaison(arbre.getChamp().getId(), recolte);
 
         validateArbreSaison(arbre.getId(), recolte);
 
@@ -77,6 +77,7 @@ public class DetailRecolteService implements DetailRecolteInterface {
                 .orElseThrow(() -> new NotFoundExceptionHndler("Arbre non trouvé"));
 
         validateArbreAge(arbre);
+        validateChampSaison(arbre.getId(),existingDetail.getRecolte());
         validateProductivite(arbre, detailsRecolteDto.getQuantiteParArbre());
 
         existingDetail.setQuantiteParArbre(detailsRecolteDto.getQuantiteParArbre());
@@ -113,13 +114,11 @@ public class DetailRecolteService implements DetailRecolteInterface {
 
     @Override
     public void supprimerDetailsRecolte(Long id) {
-      if (!detailRecolteRepository.existsById(id)){
-          throw new ValidationException(("DetailsRecolte non trouvé"));
-
-      //   DetailRecolte detailRecolte=detailRecolteRepository.getReferenceById(id);
-        //  recolteService.updateQuantiteForDeleteArbre(detailRecolte.getRecolte().getId());
-      }
+       if (!detailRecolteRepository.existsById(id)){
+            throw new ValidationException(" id DetailsRecolte no trouve :  "+ id);
+       }
         detailRecolteRepository.deleteById(id);
+        
 
     }
 
@@ -134,15 +133,16 @@ public class DetailRecolteService implements DetailRecolteInterface {
     }
 
     private void validateChampSaison(Long champId, Recolte recolte) {
-        boolean champDejaRecolte = detailRecolteRepository.existsByChampAndSaison(
+        boolean champDejaRecolte = detailRecolteRepository.existsByChampAndSaisonAndDifferentRecolte(
                 champId,
                 recolte.getSaison(),
-                recolte.getDateRecolte().getYear()
+                recolte.getDateRecolte().getYear(),
+                recolte.getId()
         );
 
         if (champDejaRecolte) {
             throw new ValidationException(
-                    String.format("Le champ a déjà été récolté pour la saison %s de l'année %d",
+                    String.format("Le champ a déjà été récolté dans une autre récolte pour la saison %s de l'année %d",
                             recolte.getSaison(),
                             recolte.getDateRecolte().getYear())
             );

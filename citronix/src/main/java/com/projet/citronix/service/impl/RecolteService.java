@@ -1,7 +1,6 @@
 package com.projet.citronix.service.impl;
 
 import com.projet.citronix.dto.RecolteDto;
-import com.projet.citronix.dto.response.FermeData;
 import com.projet.citronix.dto.response.RecolteData;
 import com.projet.citronix.entity.DetailRecolte;
 import com.projet.citronix.entity.Recolte;
@@ -114,18 +113,18 @@ public class RecolteService implements RecoletInterfce {
         recolte.setQuantiteTotale(quantiteTotal != null ? quantiteTotal : 0.0);
         recolteRepository.save(recolte);
     }
+/*
+    public void updateQuantiteForDeleteArbre(Long recolteId,Double quantiteVente) {
+        Recolte recolte = recolteRepository.findById(recolteId)
+                .orElseThrow(() -> new NotFoundExceptionHndler("Récolte non trouvée avec l'ID: " + recolteId));
+                
+        Double quantite = detailRecolteRepository.sumQuantiteByRecolteId(recolteId)-quantiteVente;
 
-   /* public void updateQuantiteForDeleteArbre(Long recolteId){
-   DetailRecolte DetailRecolte=detailRecolteRepository.getReferenceById(recolteId);
-
-        Recolte recolte = recolteRepository.getReferenceById(recolteId);
-        Double quantiteTotal = detailRecolteRepository.sumQuantiteByRecolteId(recolteId);
-
-        Double quantitaArbre=quantiteTotal-DetailRecolte.getQuantiteParArbre();
-        recolte.setQuantiteTotale(quantitaArbre);
+        recolte.setQuantiteTotale(quantite);
         recolteRepository.save(recolte);
+    }
+    */
 
-    }*/
 
 }
     

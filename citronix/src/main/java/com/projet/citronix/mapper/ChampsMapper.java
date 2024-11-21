@@ -1,6 +1,7 @@
 package com.projet.citronix.mapper;
 
 import com.projet.citronix.dto.ChampDto;
+import com.projet.citronix.dto.response.ChampData;
 import com.projet.citronix.entity.Champ;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,4 +19,11 @@ public interface ChampsMapper {
 
     @Mapping(source = "fermeid", target = "ferme.id")
     Champ champsDTOToEntity(ChampDto champsDTO);
+
+    @Mapping(target = "fermename", source = "ferme.nom")
+    @Mapping(target = "localisation", source = "ferme.localisation")
+    @Mapping(target = "superficieFerme", source = "ferme.superficie")
+    @Mapping(target = "dateCreation", source = "ferme.dateCreation")
+    @Mapping(target = "arberDtos", source = "arbres") 
+        ChampData champDataDto(Champ champ);
 }

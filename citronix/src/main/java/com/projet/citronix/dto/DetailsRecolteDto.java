@@ -7,6 +7,7 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 @Getter
 @Setter
@@ -23,7 +24,6 @@ public class DetailsRecolteDto {
     @JoinColumn(name = "recolte_id", nullable = false)
     private Long recolteid;
 
-    @ManyToOne
-    @JoinColumn(name = "arbre_id", nullable = false)
+    @NotNull(message = "La id  de arbre est requise.")
     private Long arbreid;
 }
