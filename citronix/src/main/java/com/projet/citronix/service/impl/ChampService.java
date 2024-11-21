@@ -77,7 +77,7 @@ public class ChampService implements ChampInterface {
     @Override
     public List<ChampData> getAllChamps(Pageable pageable) {
         return champRepository.findAllWith(pageable).stream()
-                .map(this::convertToData).collect(Collectors.toList());
+                .map(champsMapper::champDataDto).collect(Collectors.toList());
     }
     @Override
     public void supprimerChamp(Long id) {

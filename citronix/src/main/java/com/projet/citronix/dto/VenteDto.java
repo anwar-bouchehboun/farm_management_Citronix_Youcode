@@ -1,27 +1,19 @@
-package com.projet.citronix.entity;
+package com.projet.citronix.dto;
 
-
-
+import com.projet.citronix.entity.Recolte;
 import lombok.*;
 
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-
-
-@Entity
-@Table(name = "ventes")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Vente {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class VenteDto {
     @NotNull(message = "La date de vente est requise.")
     private LocalDate dateVente;
 
@@ -36,12 +28,11 @@ public class Vente {
     @NotNull(message = "Le client est requis.")
     private String client;
 
-    @ManyToOne
-    @JoinColumn(name = "recolte_id", nullable = false)
-    private Recolte recolte;
-    @Transient
-    private Double Revenu;
-    public Double calculerRevenu() {
-        return quantite * prixUnitaire;
-    }
+    @NotNull(message = "La id  de recolte est requise.")
+    private Long recolteid;
+
+
+    private  Double revenu;
+
+
 }

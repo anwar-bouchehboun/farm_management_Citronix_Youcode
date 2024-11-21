@@ -2,15 +2,12 @@ package com.projet.citronix.dto.response;
 
 
 
-import com.projet.citronix.dto.ArbreDto;
-import com.projet.citronix.entity.Champ;
+
 import com.projet.citronix.entity.Recolte;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Getter
 @Setter

@@ -36,4 +36,7 @@ public class Recolte {
 
     @OneToMany(mappedBy = "recolte",fetch = FetchType.EAGER)
     private List<DetailRecolte> details;
+
+    @OneToMany(mappedBy = "recolte",fetch = FetchType.LAZY)
+    private List<Vente> ventes;
 }
