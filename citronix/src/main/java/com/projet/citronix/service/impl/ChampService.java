@@ -104,7 +104,7 @@ public class ChampService implements ChampInterface {
         return champ;
     }
 
-    private void validateChampBeforeSave(Champ champ) {
+    private void validateChampBefore(Champ champ) {
         if (champ.getFerme() != null) {
             double maxSuperficie = champ.getFerme().getSuperficie() * 0.5;
             if (champ.getSuperficie() > maxSuperficie) {
@@ -118,6 +118,34 @@ public class ChampService implements ChampInterface {
             
             if (champ.getFerme().getChamps() != null &&
                 champ.getFerme().getChamps().size() >= 10) {
+                throw new ValidationException("La ferme a déjà atteint le nombre maximum de champs (10)");
+            }
+        }
+    }
+
+
+    private void validateChampBeforeSave(Champ champ) {
+        if (champ.getFerme() != null) {
+            Ferme ferme = champ.getFerme();
+            double maxSuperficie = ferme.getSuperficie() * 0.5;
+    
+            //  la somme
+            double superficieTotaleExistante = ferme.getChamps().stream()
+                    .mapToDouble(Champ::getSuperficie)
+                    .sum();
+            
+            //la superficie du nouveau champ
+            double superficieTotaleApresAjout = superficieTotaleExistante + champ.getSuperficie();
+
+    
+            if (superficieTotaleApresAjout > maxSuperficie) {
+                throw new ValidationException(String.format(
+                    "La superficie totale des champs (%.2f) dépasserait 50%% de la superficie de la ferme (%.2f)", 
+                    superficieTotaleApresAjout,
+                    ferme.getSuperficie()
+                ));
+            }
+            if (ferme.getChamps().size() >= 10) {
                 throw new ValidationException("La ferme a déjà atteint le nombre maximum de champs (10)");
             }
         }
