@@ -42,8 +42,8 @@ public class Ferme {
     private Double superficie;
 
     @PastOrPresent(message = "La date de création doit être dans le passé ou le présent.")
-    @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "date_creation")
     private LocalDate dateCreation;
 
     @OneToMany(mappedBy = "ferme", cascade = CascadeType.ALL,fetch = FetchType.EAGER)

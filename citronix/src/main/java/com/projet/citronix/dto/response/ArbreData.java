@@ -18,6 +18,8 @@ public class ArbreData {
     private int age;
     private double productiviteParSaison;
     private String categorieAge;
+    private Double quantiteParArbre;
+
 
 
 }

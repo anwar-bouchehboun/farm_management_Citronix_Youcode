@@ -1,7 +1,6 @@
 package com.projet.citronix.service.impl;
 
 import com.projet.citronix.dto.DetailsRecolteDto;
-import com.projet.citronix.dto.response.ArbreData;
 import com.projet.citronix.dto.response.DetaailRecolteData;
 import com.projet.citronix.entity.Arbre;
 import com.projet.citronix.entity.DetailRecolte;
@@ -50,10 +49,12 @@ public class DetailRecolteService implements DetailRecolteInterface {
 
         validateArbreSaison(arbre.getId(), recolte);
 
-
         DetailRecolte detailRecolte = detailsMapper.toEntity(detailsRecolteDto);
         detailRecolte.setArbre(arbre);
-        detailRecolte.setQuantiteParArbre(validateProductivite(arbre));
+
+        validationCheckQuantite(detailsRecolteDto, validateProductivite(arbre),arbre);
+        
+        detailRecolte.setQuantiteParArbre(detailsRecolteDto.getQuantiteParArbre());
         detailRecolte.setRecolte(recolte);
 
         DetailRecolte savedDetail = detailRecolteRepository.save(detailRecolte);
@@ -77,6 +78,9 @@ public class DetailRecolteService implements DetailRecolteInterface {
         validateChampSaison(arbre.getId(),existingDetail.getRecolte());
         existingDetail.setArbre(arbre);
 
+        validationCheckQuantite(detailsRecolteDto, validateProductivite(arbre),arbre);
+
+        existingDetail.setQuantiteParArbre(detailsRecolteDto.getQuantiteParArbre());
         DetailRecolte updatedDetail = detailRecolteRepository.save(existingDetail);
        recolteService.updateQuantiteTotal(existingDetail.getRecolte().getId());
 
@@ -127,6 +131,17 @@ public class DetailRecolteService implements DetailRecolteInterface {
         } else {
             throw new ValidationException(
                     String.format("L'arbre ne peut pas être récolté à l'âge de %d ans.", arbre.getAge())
+            );
+        }
+    }
+
+    public void validationCheckQuantite(DetailsRecolteDto detailsRecolteDto,Double productiviteAttendue,Arbre arbre){
+        if (detailsRecolteDto.getQuantiteParArbre() > productiviteAttendue  ) {
+            throw new ValidationException(
+                    String.format("La quantité récoltée (%.2f kg) dépasse la productivité maximale attendue (%.2f kg) pour un arbre de %d ans",
+                            detailsRecolteDto.getQuantiteParArbre(),
+                            productiviteAttendue,
+                            arbre.getAge())
             );
         }
     }
