@@ -135,8 +135,12 @@ public class DetailRecolteService implements DetailRecolteInterface {
         }
     }
 
-    public void validationCheckQuantite(DetailsRecolteDto detailsRecolteDto,Double productiviteAttendue,Arbre arbre){
-        if (detailsRecolteDto.getQuantiteParArbre() > productiviteAttendue  ) {
+    public void validationCheckQuantite(DetailsRecolteDto detailsRecolteDto, Double productiviteAttendue, Arbre arbre) {
+        if (detailsRecolteDto.getQuantiteParArbre() == null) {
+            throw new ValidationException("La quantité par arbre ne peut pas être nulle");
+        }
+        
+        if (detailsRecolteDto.getQuantiteParArbre() > productiviteAttendue) {
             throw new ValidationException(
                     String.format("La quantité récoltée (%.2f kg) dépasse la productivité maximale attendue (%.2f kg) pour un arbre de %d ans",
                             detailsRecolteDto.getQuantiteParArbre(),

@@ -20,6 +20,7 @@ public class DetailRecolte {
 
     @Positive(message = "La quantité par arbre doit être positive.")
     @Column(nullable = false)
+    @NotNull(message = "La quantité   est requise. .")
     private Double quantiteParArbre;
 
     @ManyToOne

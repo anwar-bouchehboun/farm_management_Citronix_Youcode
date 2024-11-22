@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -20,12 +21,13 @@ public class DetailRecolteController {
     private final DetailRecolteInterface detailRecolteService;
 
     @PostMapping
-    public ResponseEntity<DetailsRecolteDto> creerDetailRecolte(@RequestBody DetailsRecolteDto detailsRecolteDto) {
+    public ResponseEntity<DetailsRecolteDto> creerDetailRecolte(@Valid @RequestBody DetailsRecolteDto detailsRecolteDto) {
         return ResponseEntity.ok(detailRecolteService.creerDetailsRecolte(detailsRecolteDto));
     }
 
     @PutMapping("/{id}/edit")
     public ResponseEntity<DetailsRecolteDto> modifierDetailRecolte(
+            @Valid
             @PathVariable Long id,
             @RequestBody DetailsRecolteDto detailsRecolteDto) {
         return ResponseEntity.ok(detailRecolteService.modifierDetailsRecolte(id, detailsRecolteDto));

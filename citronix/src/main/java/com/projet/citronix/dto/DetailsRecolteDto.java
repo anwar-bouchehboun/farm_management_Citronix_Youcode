@@ -4,9 +4,10 @@ package com.projet.citronix.dto;
 
 import lombok.*;
 
-import javax.persistence.Column;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.DecimalMin;
 
 @Getter
 @Setter
@@ -15,13 +16,14 @@ import javax.validation.constraints.Positive;
 @Builder
 public class DetailsRecolteDto {
 
-    @NotNull(message = "La id  de recolte est requise.")
+    @NotNull(message = "L'ID de la récolte ne peut pas être null")
     private Long recolteid;
 
-    @NotNull(message = "La id  de arbre est requise.")
+    @NotNull(message = "L'ID de l'arbre ne peut pas être null")
     private Long arbreid;
 
-    @Positive(message = "La quantité par arbre doit être positive.")
-    @Column(nullable = false)
+    @NotNull(message = "La quantité est requise")
+    @Positive(message = "La quantité par arbre doit être positive")
+    @DecimalMin(value = "0.1", message = "La quantité minimale est de 0.1 kg")
     private Double quantiteParArbre;
 }
