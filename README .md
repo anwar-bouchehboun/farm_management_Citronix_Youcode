@@ -97,3 +97,11 @@ mvn  spring-boot:run -Dspring-boot.run.profiles=dev
 
 - **Exécuter le fichier JAR** : Une fois la construction terminée, le fichier JAR exécutable se trouvera dans le répertoire target :
   `java -jar out\artifacts\citronix_jar`
+
+- **Planification** :
+
+```
+https://anouarab95.atlassian.net/jira/software/projects/CIT/boards/15
+```
+
+

@@ -21,4 +21,20 @@ public interface ArbreMapper {
     Arbre arbreDTOToEntity(ArbreDto arbreDto);
 
    ArbreData arbreTOdata(Arbre arbre);
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "datePlantation", source = "datePlantation")
+    @Mapping(target = "nomChamp", source = "champ.nom")
+    @Mapping(target = "superficie", source = "champ.superficie")
+    @Mapping(target = "age", source = "age")
+    @Mapping(target = "productiviteParSaison", expression = "java(arbre.calculerProductiviteAnnuelle())")
+    @Mapping(target = "categorieAge", expression = "java(determinerCategorieAge(arbre.getAge()))")
+    @Mapping(target = "quantiteParArbre", expression = "java(arbre.getDetails().isEmpty() ? 0 : arbre.getDetails().get(0).getQuantiteParArbre())")
+    ArbreData arbreToData(Arbre arbre);
+
+    default String determinerCategorieAge(int age) {
+        if (age < 3) return "Arbre jeune";
+        else if (age >= 3 && age <= 10) return "Arbre mature";
+        else return "Arbre vieux";
+    }
 }

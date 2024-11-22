@@ -26,7 +26,7 @@ public class DetailRecolte {
     @JoinColumn(name = "recolte_id", nullable = false)
     private Recolte recolte;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "arbre_id", nullable = false)
     private Arbre arbre;
 

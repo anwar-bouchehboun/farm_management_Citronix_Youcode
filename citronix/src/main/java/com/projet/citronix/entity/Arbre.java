@@ -49,9 +49,11 @@ public class Arbre {
     public void calculerAgeEtVerifierPeriodePlantation() {
         this.age =  Period.between(datePlantation, LocalDate.now()).getYears();
     }
+
     public int getAge() {
         return Period.between(datePlantation, LocalDate.now()).getYears();
     }
+
 
     public double calculerProductiviteAnnuelle() {
         if (getAge() < 3) {

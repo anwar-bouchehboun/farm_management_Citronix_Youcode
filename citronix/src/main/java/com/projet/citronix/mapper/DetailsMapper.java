@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
 @Component
-@Mapper
+@Mapper(componentModel = "spring")
 public interface DetailsMapper {
 
     DetailsMapper INSTANCE = Mappers.getMapper(DetailsMapper.class);
@@ -23,4 +23,6 @@ public interface DetailsMapper {
     DetailRecolte toEntity(DetailsRecolteDto detailsRecolteDto);
 
     DetaailRecolteData toDtoData(DetailRecolte detailRecolte);
+
+
 }
