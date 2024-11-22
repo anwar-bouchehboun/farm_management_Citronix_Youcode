@@ -15,4 +15,7 @@ public class DetaailRecolteData {
     private String recolteDate;
     private String arbreName;
 
+
+
+
 }

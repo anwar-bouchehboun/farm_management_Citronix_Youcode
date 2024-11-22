@@ -69,14 +69,14 @@ public class ArbreService implements ArbreInterface {
     @Override
     public Optional<ArbreData> getArbreById(Long id) {
         return Optional.of(arbreRepository.findById(id)
-                .map(this::convertToData)
+                .map(arbreMapper::arbreToData)
                 .orElseThrow(() -> new NotFoundExceptionHndler("Arbre non trouvée avec l'ID: " + id)));
     }
 
     @Override
     public List<ArbreData> getAllArbres(Pageable pageable) {
         return arbreRepository.findAll(pageable).stream()
-                .map(this::convertToData)
+                .map(arbreMapper::arbreToData)
                 .collect(Collectors.toList());
     }
 
@@ -100,7 +100,7 @@ public class ArbreService implements ArbreInterface {
             arbrePage = arbreRepository.findAllWithPagination(pageable);
         }
         
-        return arbrePage.map(this::convertToData);
+        return arbrePage.map(arbreMapper::arbreToData);
     }
 
     private void validateDensiteArbres(Champ champ) {
@@ -137,11 +137,12 @@ public class ArbreService implements ArbreInterface {
     private Arbre convertToEntity(ArbreDto arbreDto, Champ champ) {
         Arbre arbre = arbreMapper.arbreDTOToEntity(arbreDto);
         arbre.setChamp(champ);
-        arbre.calculerAgeEtVerifierPeriodePlantation();
+        arbre.getAge() ;
         return arbre;
     }
 
-    private ArbreData convertToData(Arbre arbre) {
+
+   /* private ArbreData convertToData(Arbre arbre) {
 
         double productivite = arbre.calculerProductiviteAnnuelle();
         String categorie = determinerCategorieAge(arbre.getAge());
@@ -168,4 +169,6 @@ public class ArbreService implements ArbreInterface {
             return "Arbre vieux";
         }
     }
+
+    */
 }
