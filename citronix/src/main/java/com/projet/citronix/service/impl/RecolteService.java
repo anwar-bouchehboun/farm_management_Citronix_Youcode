@@ -113,7 +113,7 @@ public class RecolteService implements RecoletInterfce {
         recolte.setQuantiteTotale(quantiteTotal != null ? quantiteTotal : 0.0);
         recolteRepository.save(recolte);
     }
-/*
+/*   update Quntite
     public void updateQuantiteForDeleteArbre(Long recolteId,Double quantiteVente) {
         Recolte recolte = recolteRepository.findById(recolteId)
                 .orElseThrow(() -> new NotFoundExceptionHndler("Récolte non trouvée avec l'ID: " + recolteId));
