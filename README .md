@@ -86,7 +86,6 @@ mvn  spring-boot:run -Dspring-boot.run.profiles=dev
 
 - **Profile** : `prod` pour l'environnement de production, `dev`
   pour l'environnement de développement.
-- **API Documentation** : Utiliser l'outil Swagger pour la documentation de l'API.
 - **Utilisation** : Utiliser un outil comme Postman pour envoyer des requêtes
   à l'API.
 - **Tests** : Exécuter les tests unitaires avec JUnit et Mockito.
@@ -95,5 +94,6 @@ mvn  spring-boot:run -Dspring-boot.run.profiles=dev
 - **Gestion des données** : Valider les données avec annotations Spring.
 - **Gestion des logs** : Utiliser un outil comme Logback pour la gestion des
   logs.
+
 - **Exécuter le fichier JAR** : Une fois la construction terminée, le fichier JAR exécutable se trouvera dans le répertoire target :
   `java -jar out\artifacts\citronix_jar`
