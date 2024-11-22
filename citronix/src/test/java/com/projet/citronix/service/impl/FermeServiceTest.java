@@ -29,8 +29,7 @@ public class FermeServiceTest {
     @Mock
     private FermeRepository fermeRepository;
 
-    @Mock
-    private FermeMapper fermeMapper;
+
 
     @InjectMocks
     private FermeService fermeService;
@@ -65,15 +64,12 @@ public class FermeServiceTest {
 
     @Test
     public void creerFerme_Success() {
-        when(fermeMapper.toEntity(any(FermeDto.class))).thenReturn(ferme);
-        when(fermeRepository.save(any(Ferme.class))).thenReturn(ferme);
-        when(fermeMapper.toDto(any(Ferme.class))).thenReturn(fermeDto);
 
         FermeDto result = fermeService.creerFerme(fermeDto);
 
         assertNotNull(result);
         assertEquals(fermeDto.getNom(), result.getNom());
-        verify(fermeRepository, times(1)).save(any(Ferme.class));
+        verify(fermeRepository).save(any(Ferme.class));
     }
 
     @Test(expected = ValidationException.class)
@@ -85,15 +81,13 @@ public class FermeServiceTest {
     @Test
     public void modifierFerme_Success() {
         when(fermeRepository.findById(anyLong())).thenReturn(Optional.of(ferme));
-        when(fermeMapper.toEntity(any(FermeDto.class))).thenReturn(ferme);
         when(fermeRepository.save(any(Ferme.class))).thenReturn(ferme);
-        when(fermeMapper.toDto(any(Ferme.class))).thenReturn(fermeDto);
 
         FermeDto result = fermeService.modifierFerme(1L, fermeDto);
 
         assertNotNull(result);
         assertEquals(fermeDto.getNom(), result.getNom());
-        verify(fermeRepository, times(1)).save(any(Ferme.class));
+        verify(fermeRepository).save(any(Ferme.class));
     }
 
     @Test(expected = NotFoundExceptionHndler.class)
@@ -107,21 +101,18 @@ public class FermeServiceTest {
         Long fermeId = 1L;
         ferme.setId(fermeId);
         when(fermeRepository.findById(fermeId)).thenReturn(Optional.of(ferme));
-        when(fermeMapper.toDtoData(ferme)).thenReturn(fermeData);
 
         Optional<FermeData> result = fermeService.getFermeById(fermeId);
 
         assertTrue(result.isPresent());
         assertEquals(fermeData.getNom(), result.get().getNom());
         verify(fermeRepository).findById(fermeId);
-        verify(fermeMapper).toDtoData(ferme);
     }
 
     @Test
     public void rechercherFermes_Success() {
         when(fermeRepository.rechercherFermes(anyString(), any(), anyString(), anyDouble()))
                 .thenReturn(Arrays.asList(ferme));
-        when(fermeMapper.toDtoData(any(Ferme.class))).thenReturn(fermeData);
 
         List<FermeData> results = fermeService.rechercherFermes(
                 "Ferme Test",
@@ -132,6 +123,6 @@ public class FermeServiceTest {
 
         assertFalse(results.isEmpty());
         assertEquals(1, results.size());
-        assertEquals(fermeData.getNom(), results.get(0).getNom());
+        assertEquals(ferme.getNom(), results.get(0).getNom());
     }
 }
