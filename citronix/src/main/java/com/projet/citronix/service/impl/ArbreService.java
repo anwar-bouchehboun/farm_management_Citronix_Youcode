@@ -147,12 +147,14 @@ public class ArbreService implements ArbreInterface {
         String categorie = determinerCategorieAge(arbre.getAge());
         
         return ArbreData.builder()
+                .id(arbre.getId())
                 .datePlantation(arbre.getDatePlantation())
                 .nomChamp(arbre.getChamp().getNom())
                 .superficie(arbre.getChamp().getSuperficie())
                 .age(arbre.getAge())
                 .productiviteParSaison(productivite)
                 .categorieAge(categorie)
+                .quantiteParArbre(arbre.getDetails().isEmpty() ? 0 : arbre.getDetails().get(0).getQuantiteParArbre())
                 .build();
     }
 
