@@ -1,4 +1,4 @@
-package com.projet.citronix.service.impl;
+package com.projet.citronix.service.impl.testIntegration;
 
 import com.projet.citronix.dto.ArbreDto;
 import com.projet.citronix.entity.Champ;
@@ -7,6 +7,7 @@ import com.projet.citronix.exception.NotFoundExceptionHndler;
 import com.projet.citronix.repository.ArbreRepository;
 import com.projet.citronix.repository.ChampRepository;
 import com.projet.citronix.repository.FermeRepository;
+import com.projet.citronix.service.impl.ArbreService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

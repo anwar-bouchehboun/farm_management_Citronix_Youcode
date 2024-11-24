@@ -1,4 +1,4 @@
-package com.projet.citronix.service.impl;
+package com.projet.citronix.service.impl.testIntegration;
 
 import com.projet.citronix.dto.FermeDto;
 import com.projet.citronix.dto.response.FermeData;
@@ -6,6 +6,7 @@ import com.projet.citronix.entity.Ferme;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.repository.FermeRepository;
+import com.projet.citronix.service.impl.FermeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

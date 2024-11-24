@@ -1,10 +1,11 @@
-package com.projet.citronix.service.impl;
+package com.projet.citronix.service.impl.testIntegration;
 import com.projet.citronix.dto.ChampDto;
 import com.projet.citronix.entity.Ferme;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.repository.ChampRepository;
 import com.projet.citronix.repository.FermeRepository;
+import com.projet.citronix.service.impl.ChampService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
