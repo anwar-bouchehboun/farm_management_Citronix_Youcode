@@ -133,7 +133,7 @@ https://anouarab95.atlassian.net/jira/software/projects/CIT/boards/15
 │   │       │   └── interfaces/
 │   │       └── CitronixApplication.java
 │   └── resources/
-│       └── application.yaml
-        └── application-dev.yaml
-        └── application-prod.yaml
+│       └── application.yml
+        └── application-dev.yml
+        └── application-prod.yml
 ```
