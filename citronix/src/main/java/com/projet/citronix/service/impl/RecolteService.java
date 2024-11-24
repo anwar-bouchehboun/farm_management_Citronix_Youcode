@@ -2,7 +2,6 @@ package com.projet.citronix.service.impl;
 
 import com.projet.citronix.dto.RecolteDto;
 import com.projet.citronix.dto.response.RecolteData;
-import com.projet.citronix.entity.DetailRecolte;
 import com.projet.citronix.entity.Recolte;
 import com.projet.citronix.enums.Saison;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
