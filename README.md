@@ -84,6 +84,18 @@ mvn  spring-boot:run -Dspring-boot.run.profiles=prod
 mvn  spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
+## Architecture
+
+- **Controller** : Gère les requêtes entrantes et les réponses sortantes.
+- **Service** : Gère les logiques métier.
+- **Repository** : Gère les interactions avec la base de données.
+- **Entity** : Modèle de données.
+- **Tests** : Tests unitaires et de fonctionnalités.
+- **Outils** : Lombok, Builder Pattern, MapStruct.
+- **Validation** : Annotations Spring.
+- **Gestion des exceptions** : Handlers dédiés.
+- **Configuration** : Profils de configuration (dev, prod).
+
 - **Profile** : `prod` pour l'environnement de production, `dev`
   pour l'environnement de développement.
 - **Utilisation** : Utiliser un outil comme Postman pour envoyer des requêtes
@@ -104,3 +116,24 @@ mvn  spring-boot:run -Dspring-boot.run.profiles=dev
 https://anouarab95.atlassian.net/jira/software/projects/CIT/boards/15
 ```
 
+- **Schéma d'architecture** :
+
+```src/
+├── main/
+│   ├── java/
+│   │   └── com/projet/citronix/
+│   │       ├── controller/
+│   │       ├── dto/
+│   │       ├── entity/
+├           |── mapper/
+│   │       ├── exception/
+│   │       ├── repository/
+│   │       ├── service/
+│   │       │   ├── impl/
+│   │       │   └── interfaces/
+│   │       └── CitronixApplication.java
+│   └── resources/
+│       └── application.yaml
+        └── application-dev.yaml
+        └── application-prod.yaml
+```
