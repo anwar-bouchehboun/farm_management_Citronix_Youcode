@@ -2,7 +2,7 @@ package com.projet.citronix.controller;
 
 import com.projet.citronix.dto.DetailsRecolteDto;
 import com.projet.citronix.dto.response.DetaailRecolteData;
-import com.projet.citronix.service.DetailRecolteInterface;
+import com.projet.citronix.service.interfaces.DetailRecolteInterface;
 import com.projet.citronix.utilitaire.ResponseMessage;
 import lombok.*;
 import org.springframework.data.domain.PageRequest;

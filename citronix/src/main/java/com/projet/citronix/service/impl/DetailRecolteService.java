@@ -12,7 +12,7 @@ import com.projet.citronix.mapper.DetailsMapper;
 import com.projet.citronix.repository.ArbreRepository;
 import com.projet.citronix.repository.DetailRecolteRepository;
 import com.projet.citronix.repository.RecolteRepository;
-import com.projet.citronix.service.DetailRecolteInterface;
+import com.projet.citronix.service.interfaces.DetailRecolteInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -82,7 +82,7 @@ public class DetailRecolteService implements DetailRecolteInterface {
 
         existingDetail.setQuantiteParArbre(detailsRecolteDto.getQuantiteParArbre());
         DetailRecolte updatedDetail = detailRecolteRepository.save(existingDetail);
-       recolteService.updateQuantiteTotal(existingDetail.getRecolte().getId());
+     //  recolteService.updateQuantiteTotal(existingDetail.getRecolte().getId());
 
         return detailsMapper.toDto(updatedDetail);
     }

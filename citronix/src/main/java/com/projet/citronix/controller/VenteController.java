@@ -3,7 +3,7 @@ package com.projet.citronix.controller;
 import com.projet.citronix.dto.VenteDto;
 import com.projet.citronix.dto.response.VenteData;
 import com.projet.citronix.exception.ValidationException;
-import com.projet.citronix.service.VenteInterface;
+import com.projet.citronix.service.interfaces.VenteInterface;
 import com.projet.citronix.utilitaire.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

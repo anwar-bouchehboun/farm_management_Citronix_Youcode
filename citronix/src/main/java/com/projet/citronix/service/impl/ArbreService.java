@@ -2,7 +2,6 @@ package com.projet.citronix.service.impl;
 
 import com.projet.citronix.dto.ArbreDto;
 import com.projet.citronix.dto.response.ArbreData;
-import com.projet.citronix.dto.response.ChampData;
 import com.projet.citronix.entity.Arbre;
 import com.projet.citronix.entity.Champ;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
@@ -10,7 +9,7 @@ import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.mapper.ArbreMapper;
 import com.projet.citronix.repository.ArbreRepository;
 import com.projet.citronix.repository.ChampRepository;
-import com.projet.citronix.service.ArbreInterface;
+import com.projet.citronix.service.interfaces.ArbreInterface;
 import com.projet.citronix.utilitaire.ArbreSearchCriteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -9,7 +9,7 @@ import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.mapper.VenteMapper;
 import com.projet.citronix.repository.RecolteRepository;
 import com.projet.citronix.repository.VenteRepository;
-import com.projet.citronix.service.VenteInterface;
+import com.projet.citronix.service.interfaces.VenteInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

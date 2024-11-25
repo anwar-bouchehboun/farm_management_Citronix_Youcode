@@ -9,7 +9,7 @@ import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.mapper.RecolteMapper;
 import com.projet.citronix.repository.RecolteRepository;
 import com.projet.citronix.repository.DetailRecolteRepository;
-import com.projet.citronix.service.RecoletInterfce;
+import com.projet.citronix.service.interfaces.RecoletInterfce;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

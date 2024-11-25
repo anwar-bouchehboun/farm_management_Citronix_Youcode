@@ -10,7 +10,7 @@ import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.mapper.ChampsMapper;
 import com.projet.citronix.repository.ChampRepository;
 import com.projet.citronix.repository.FermeRepository;
-import com.projet.citronix.service.ChampInterface;
+import com.projet.citronix.service.interfaces.ChampInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,9 +47,18 @@ public class ChampService implements ChampInterface {
 
     @Override
     public ChampDto modifierChamp(Long id, ChampDto champDto) {
-       champRepository.findById(id)
+        Champ existingChamp =  champRepository.findById(id)
                 .orElseThrow(() -> new NotFoundExceptionHndler("Champ non trouvé avec l'ID: " + id));
-        
+
+
+        if (champDto.getSuperficie() < existingChamp.getSuperficie()) {
+            throw new ValidationException(String.format(
+                    "La nouvelle superficie (%.2f) ne peut pas être supérieure à la superficie actuelle (%.2f) du champ '%s'",
+                    champDto.getSuperficie(),
+                    existingChamp.getSuperficie(),
+                    existingChamp.getNom()
+            ));
+        }
         Ferme ferme = fermeRepository.findById(champDto.getFermeid())
                 .orElseThrow(() -> new NotFoundExceptionHndler("Ferme non trouvée avec l'ID: " + champDto.getFermeid()));
         

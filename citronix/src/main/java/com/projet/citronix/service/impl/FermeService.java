@@ -8,7 +8,7 @@ import com.projet.citronix.exception.NotFoundExceptionHndler;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.mapper.FermeMapper;
 import com.projet.citronix.repository.FermeRepository;
-import com.projet.citronix.service.FermeInterface;
+import com.projet.citronix.service.interfaces.FermeInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -44,10 +44,18 @@ public class FermeService implements FermeInterface {
 
     @Override
     public FermeDto modifierFerme(Long id, FermeDto fermeDto) {
-       fermeRepository.findById(id)
+      Ferme existingFerme= fermeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundExceptionHndler("Ferme non trouvée avec l'ID: " + id));
-                
 
+
+    if (fermeDto.getSuperficie() < existingFerme.getSuperficie()) {
+        throw new ValidationException(String.format(
+            "La nouvelle superficie (%.2f) ne peut pas être supérieure à la superficie actuelle (%.2f) de la ferme '%s'",
+            fermeDto.getSuperficie(),
+            existingFerme.getSuperficie(),
+            existingFerme.getNom()
+        ));
+    }
         Ferme fermeToUpdate = fermeMapper.toEntity(fermeDto);
         fermeToUpdate.setId(id);
         fermeRepository.save(fermeToUpdate);

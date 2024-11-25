@@ -1,4 +1,4 @@
-package com.projet.citronix.service;
+package com.projet.citronix.service.interfaces;
 
 import com.projet.citronix.dto.DetailsRecolteDto;
 import com.projet.citronix.dto.response.DetaailRecolteData;
