@@ -11,6 +11,7 @@ import com.projet.citronix.repository.RecolteRepository;
 import com.projet.citronix.repository.VenteRepository;
 import com.projet.citronix.service.interfaces.VenteInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,6 +74,12 @@ public class VenteService  implements VenteInterface {
         return venteRepository.findAll(pageable)
                 .map(venteMapper::ventData)
                 .getContent();
+    }
+
+    @Override
+    public Page<VenteData> getAllVent(Pageable pageable) {
+        return venteRepository.findAll(pageable)
+                .map(venteMapper::ventData);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.projet.citronix.service.interfaces.VenteInterface;
 import com.projet.citronix.utilitaire.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -61,5 +62,11 @@ public class VenteController {
         log.info("Suppression de la vente avec l'ID: {}", id);
         venteInterface.supprimerVente(id);
         return ResponseEntity.ok(ResponseMessage.deleteSuccess("La vente", id));
+    }
+
+
+   @GetMapping("/page")
+    public ResponseEntity<Page<VenteData>> getAllVent(Pageable pageable) {
+        return ResponseEntity.ok(venteInterface.getAllVent(pageable));
     }
 }

@@ -22,6 +22,8 @@ public interface DetailsMapper {
     @Mapping(source = "arbreid", target = "arbre.id")
     DetailRecolte toEntity(DetailsRecolteDto detailsRecolteDto);
 
+    @Mapping(source = "recolte.dateRecolte",target = "recolteDate")
+    @Mapping(source = "arbre.id",target = "arbreName")
     DetaailRecolteData toDtoData(DetailRecolte detailRecolte);
 
 

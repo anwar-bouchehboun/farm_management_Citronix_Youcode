@@ -7,6 +7,7 @@ import com.projet.citronix.entity.Recolte;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Getter
@@ -22,9 +23,7 @@ public class RecolteData {
 
     private Double quantiteTotale ;
 
-
-
-
+    private List<DetaailRecolteData> detaailRecolteData;
     public  static RecolteData tochampData(Recolte recolte){
 
 

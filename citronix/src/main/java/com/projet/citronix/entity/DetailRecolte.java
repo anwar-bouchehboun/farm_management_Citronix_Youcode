@@ -23,7 +23,7 @@ public class DetailRecolte {
     @NotNull(message = "La quantité   est requise. .")
     private Double quantiteParArbre;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "recolte_id", nullable = false)
     private Recolte recolte;
 
