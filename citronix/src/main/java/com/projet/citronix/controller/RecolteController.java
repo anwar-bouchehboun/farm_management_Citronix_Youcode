@@ -2,6 +2,7 @@ package com.projet.citronix.controller;
 
 import com.projet.citronix.dto.RecolteDto;
 import com.projet.citronix.dto.response.RecolteData;
+import com.projet.citronix.enums.Saison;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.service.impl.RecolteService;
 import com.projet.citronix.utilitaire.ResponseMessage;
@@ -76,5 +77,22 @@ public class RecolteController {
 
        return ResponseEntity.ok(ResponseMessage.deleteSuccess("La recolte", id));
    }
+
+  /*  @GetMapping("/femresesion")
+    public ResponseEntity<List<RecolteData>> getFemre(
+            @RequestParam("saison") Saison saison,
+            @RequestParam("Femreid") Long femreId) {
+        List<RecolteData> result = recolteService.getAllfemre(saison, femreId);
+
+
+            return ResponseEntity.ok(result);
+
+    }*/
+
+    @GetMapping("/ferme-data")
+    public ResponseEntity<List<RecolteData>> getDataFerme() {
+        log.info("Récupération des données de récolte par ferme");
+        return ResponseEntity.ok(recolteService.dataFerme());
+    }
 
 }

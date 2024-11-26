@@ -1,6 +1,7 @@
 package com.projet.citronix.controller;
 
 import com.projet.citronix.dto.VenteDto;
+import com.projet.citronix.dto.response.RecolteData;
 import com.projet.citronix.dto.response.VenteData;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.service.interfaces.VenteInterface;
@@ -68,5 +69,12 @@ public class VenteController {
    @GetMapping("/page")
     public ResponseEntity<Page<VenteData>> getAllVent(Pageable pageable) {
         return ResponseEntity.ok(venteInterface.getAllVent(pageable));
+    }
+
+
+    @GetMapping("/vente-data")
+    public ResponseEntity<List<VenteData>> getDataFerme() {
+        log.info("Récupération des données de récolte par ferme");
+        return ResponseEntity.ok(venteInterface.dataVente());
     }
 }

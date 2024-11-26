@@ -1,12 +1,14 @@
 package com.projet.citronix.service.impl;
 
 import com.projet.citronix.dto.VenteDto;
+import com.projet.citronix.dto.response.RecolteData;
 import com.projet.citronix.dto.response.VenteData;
 import com.projet.citronix.entity.Recolte;
 import com.projet.citronix.entity.Vente;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.mapper.VenteMapper;
+import com.projet.citronix.repository.FermeRepository;
 import com.projet.citronix.repository.RecolteRepository;
 import com.projet.citronix.repository.VenteRepository;
 import com.projet.citronix.service.interfaces.VenteInterface;
@@ -18,12 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class VenteService  implements VenteInterface {
     private final VenteRepository venteRepository;
     private final VenteMapper venteMapper=VenteMapper.INSTANCE;
+    private final FermeRepository fermeRepository;
+
     private final RecolteRepository recolteRepository;
 
     @Override
@@ -130,6 +136,23 @@ public class VenteService  implements VenteInterface {
             ));
         }
     }
+
+
+    public List<VenteData> dataVente(){
+        return fermeRepository.findAll()
+                .stream()
+                .flatMap(ferme -> ferme.getChamps().stream())
+                .flatMap(champ -> champ.getArbres().stream())
+                .flatMap(arbre -> arbre.getDetails().stream())
+                .map(detailRecolte -> detailRecolte.getRecolte())
+                .distinct()
+                .filter(recolte -> recolte.getId()!=null)
+                .flatMap(recolte -> recolte.getVentes().stream())
+                .filter(vente -> vente.getId()!=null)
+                .map(venteMapper::ventData)
+                .collect(Collectors.toList());
+    }
+
 
 
 }

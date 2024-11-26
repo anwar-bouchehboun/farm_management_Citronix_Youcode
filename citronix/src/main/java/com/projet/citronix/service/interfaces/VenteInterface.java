@@ -21,4 +21,5 @@ public interface VenteInterface {
     List<VenteData> getAllVentes(Pageable pageable);
     Page<VenteData> getAllVent(Pageable pageable);
     void supprimerVente(Long id);
+    List<VenteData> dataVente();
 }

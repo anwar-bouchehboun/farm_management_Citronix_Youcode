@@ -3,10 +3,16 @@ package com.projet.citronix.service.impl;
 
 import com.projet.citronix.dto.FermeDto;
 import com.projet.citronix.dto.response.FermeData;
+import com.projet.citronix.dto.response.RecolteData;
+import com.projet.citronix.dto.response.VenteData;
+import com.projet.citronix.entity.DetailRecolte;
 import com.projet.citronix.entity.Ferme;
+import com.projet.citronix.entity.Vente;
+import com.projet.citronix.enums.Saison;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.mapper.FermeMapper;
+import com.projet.citronix.mapper.RecolteMapper;
 import com.projet.citronix.repository.FermeRepository;
 import com.projet.citronix.service.interfaces.FermeInterface;
 import lombok.RequiredArgsConstructor;
@@ -93,6 +99,10 @@ public class FermeService implements FermeInterface {
                 .map(fermeMapper::toDtoData)
                 .collect(Collectors.toList());
     }
+
+
+
+
 
 
 }

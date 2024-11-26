@@ -2,11 +2,12 @@ package com.projet.citronix.service.impl;
 
 import com.projet.citronix.dto.RecolteDto;
 import com.projet.citronix.dto.response.RecolteData;
-import com.projet.citronix.entity.Recolte;
+import com.projet.citronix.entity.*;
 import com.projet.citronix.enums.Saison;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.mapper.RecolteMapper;
+import com.projet.citronix.repository.FermeRepository;
 import com.projet.citronix.repository.RecolteRepository;
 import com.projet.citronix.repository.DetailRecolteRepository;
 import com.projet.citronix.service.interfaces.RecoletInterfce;
@@ -27,25 +28,25 @@ public class RecolteService implements RecoletInterfce {
 
     private final RecolteRepository recolteRepository;
     private final DetailRecolteRepository detailRecolteRepository;
-    private final RecolteMapper recolteMapper=RecolteMapper.INSTANCE;
+    private final FermeRepository fermeRepository;
+
+    private final RecolteMapper recolteMapper = RecolteMapper.INSTANCE;
 
     @Override
     public RecolteDto creerRecolet(RecolteDto recolteDto) {
         validateRecolteDate(recolteDto);
-        Recolte recolte=recolteMapper.RecolteDTOToEntity(recolteDto);
-           recolteRepository.save(recolte);
+        Recolte recolte = recolteMapper.RecolteDTOToEntity(recolteDto);
+        recolteRepository.save(recolte);
         return recolteMapper.recolteDto(recolte);
     }
 
-
-
     @Override
     public RecolteDto modifierRecolet(Long id, RecolteDto recolteDto) {
-        if (!recolteRepository.existsById(id)){
+        if (!recolteRepository.existsById(id)) {
             throw new ValidationException("Recolte non trouvée avec l'ID: " + id);
         }
         validateRecolteDate(recolteDto);
-        Recolte recolte=recolteMapper.RecolteDTOToEntity(recolteDto);
+        Recolte recolte = recolteMapper.RecolteDTOToEntity(recolteDto);
         recolte.setId(id);
         recolteRepository.save(recolte);
 
@@ -61,20 +62,18 @@ public class RecolteService implements RecoletInterfce {
 
     @Override
     public List<RecolteData> getAllRecolets(Pageable pageable) {
-        return   recolteRepository.findAll(pageable).stream()
+        return recolteRepository.findAll(pageable).stream()
                 .map(recolteMapper::toDtoData)
                 .collect(Collectors.toList());
     }
 
     @Override
     public void supprimerRecolet(Long id) {
-        if (!recolteRepository.existsById(id)){
+        if (!recolteRepository.existsById(id)) {
             throw new ValidationException("Recolte non trouvée avec l'ID: " + id);
         }
         recolteRepository.deleteById(id);
     }
-
-
 
     private void validateRecolteDate(RecolteDto recolteDto) {
         Month month = recolteDto.getDateRecolte().getMonth();
@@ -103,27 +102,47 @@ public class RecolteService implements RecoletInterfce {
         }
     }
 
-    //update la quantite total de la recolte
+    // update la quantite total de la recolte
     public void updateQuantiteTotal(Long recolteId) {
         Double quantiteTotal = detailRecolteRepository.sumQuantiteByRecolteId(recolteId);
         Recolte recolte = recolteRepository.findById(recolteId)
-            .orElseThrow(() -> new ValidationException("Récolte non trouvée"));
-        
+                .orElseThrow(() -> new ValidationException("Récolte non trouvée"));
+
         recolte.setQuantiteTotale(quantiteTotal != null ? quantiteTotal : 0.0);
         recolteRepository.save(recolte);
     }
-/*   update Quntite
-    public void updateQuantiteForDeleteArbre(Long recolteId,Double quantiteVente) {
-        Recolte recolte = recolteRepository.findById(recolteId)
-                .orElseThrow(() -> new NotFoundExceptionHndler("Récolte non trouvée avec l'ID: " + recolteId));
-                
-        Double quantite = detailRecolteRepository.sumQuantiteByRecolteId(recolteId)-quantiteVente;
-
-        recolte.setQuantiteTotale(quantite);
-        recolteRepository.save(recolte);
+    /*
+     * update Quntite
+     * public void updateQuantiteForDeleteArbre(Long recolteId,Double quantiteVente)
+     * {
+     * Recolte recolte = recolteRepository.findById(recolteId)
+     * .orElseThrow(() -> new
+     * NotFoundExceptionHndler("Récolte non trouvée avec l'ID: " + recolteId));
+     *
+     * Double quantite =
+     * detailRecolteRepository.sumQuantiteByRecolteId(recolteId)-quantiteVente;
+     *
+     * recolte.setQuantiteTotale(quantite);
+     * recolteRepository.save(recolte);
+     * }
+     */
+    public List<RecolteData> dataFerme(){
+        return fermeRepository.findAll()
+                .stream()
+                .flatMap(ferme -> ferme.getChamps().stream())
+                .flatMap(champ -> champ.getArbres().stream())
+                .flatMap(arbre -> arbre.getDetails().stream())
+                .map(detailRecolte -> detailRecolte.getRecolte())
+                .distinct()
+                .filter(recolte -> recolte.getId()!=null)
+                .map(recolteMapper::toDtoData)
+                .collect(Collectors.toList());
     }
-    */
-
-
-}
     
+
+
+
+
+
+
+    }
