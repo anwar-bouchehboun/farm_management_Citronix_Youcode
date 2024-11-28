@@ -89,10 +89,10 @@ public class RecolteController {
 
     }*/
 
-    @GetMapping("/ferme-data")
-    public ResponseEntity<List<RecolteData>> getDataFerme() {
+    @GetMapping("/ferme-data/{ID}")
+    public ResponseEntity<List<RecolteData>> getDataFerme(@PathVariable Long ID) {
         log.info("Récupération des données de récolte par ferme");
-        return ResponseEntity.ok(recolteService.dataFerme());
+        return ResponseEntity.ok(recolteService.dataFerme(ID));
     }
 
 }

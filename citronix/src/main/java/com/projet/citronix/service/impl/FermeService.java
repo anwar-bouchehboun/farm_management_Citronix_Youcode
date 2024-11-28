@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -99,6 +101,69 @@ public class FermeService implements FermeInterface {
                 .map(fermeMapper::toDtoData)
                 .collect(Collectors.toList());
     }
+
+
+    public List<FermeData> fermeGetAll(){
+        return fermeRepository.findAll()
+                .stream()
+                .filter(
+                (ferme -> ferme.getChamps().stream()
+                .flatMap(champ -> champ.getArbres().stream())
+                .flatMap(arbre ->arbre.getDetails().stream() )
+                .anyMatch(detailRecolte -> detailRecolte.getRecolte().getSaison()==Saison.ETE)
+                )).map(fermeMapper::toDtoData).collect(Collectors.toList());
+    }
+
+
+
+    public List<FermeData> getFermesWithOldTrees() {
+        return fermeRepository.findAll()
+                .stream()
+                .filter(ferme ->ferme.getChamps().size()==1 && ferme.getChamps().stream()
+                        .anyMatch(champ -> champ.getArbres().size()<10))
+                .map(fermeMapper::toDtoData)
+                .collect(Collectors.toList());
+    }
+    public List<FermeData> getFermesWithOld() {
+        return fermeRepository.findAll()
+                .stream()
+                .filter(ferme ->ferme.getChamps().size()==1 && ferme.getChamps().stream()
+                        .flatMap(champ -> champ.getArbres().stream())
+                        .count()>100)
+                .map(fermeMapper::toDtoData)
+                .collect(Collectors.toList());
+    }
+    public Map<Double, List<FermeData>> getFermestih() {
+        return fermeRepository.findAll()
+                .stream()
+                .filter(ferme -> ferme.getChamps().size()==1)
+                .filter(ferme -> ferme.getChamps().stream()
+                .mapToInt(champ -> champ.getArbres().size()).count()>0)
+                .collect(Collectors.groupingBy(
+                    ferme -> ferme.getChamps().stream()
+                        .flatMap(champ -> champ.getArbres().stream())
+                        .flatMap(arbre -> arbre.getDetails().stream())
+                        .mapToDouble(DetailRecolte::getQuantiteParArbre)
+                        .sum(),
+                    Collectors.mapping(fermeMapper::toDtoData, Collectors.toList())
+                ));
+
+
+    }
+
+    public List<FermeData> getNomFermesWithMinChampAndArbres() {
+        return fermeRepository.findAll()
+                .stream()
+                .filter(ferme ->
+                        ferme.getChamps().size() >= 1 &&
+                                ferme.getChamps().stream()
+                                        .mapToInt(champ -> champ.getArbres().size())
+                                     .count()>0
+                )
+                .map(fermeMapper::toDtoData)
+                .collect(Collectors.toList());
+    }
+
 
 
 

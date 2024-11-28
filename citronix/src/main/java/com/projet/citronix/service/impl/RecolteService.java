@@ -126,15 +126,35 @@ public class RecolteService implements RecoletInterfce {
      * recolteRepository.save(recolte);
      * }
      */
-    public List<RecolteData> dataFerme(){
-        return fermeRepository.findAll()
+    public List<RecolteData> dataFerme(Long fermeID){
+
+        return recolteRepository.findAllbyFemreId(fermeID).stream()
+                .map(recolteMapper::toDtoData)
+                .collect(Collectors.toList());
+     /*   return fermeRepository.findAll()
                 .stream()
                 .flatMap(ferme -> ferme.getChamps().stream())
                 .flatMap(champ -> champ.getArbres().stream())
                 .flatMap(arbre -> arbre.getDetails().stream())
                 .map(detailRecolte -> detailRecolte.getRecolte())
                 .distinct()
-                .filter(recolte -> recolte.getId()!=null)
+                .filter(recolte -> recolte.getId()!=null && recolte.getSaison()==Saison.ETE)
+                .map(recolteMapper::toDtoData)
+                .collect(Collectors.toList());
+               */
+
+    
+    }
+
+    public List<RecolteData> ret(){
+        return recolteRepository.findAll()
+                .stream()
+                .filter(
+                        recolte -> recolte.getDetails().stream()
+                                .filter(detailRecolte -> detailRecolte.getArbre()!=null)
+                                .flatMap(detailRecolte -> detailRecolte.getArbre().getChamp().getFerme().getChamps().stream())
+                                .anyMatch(champ -> champ.getArbres()!=null)
+                )
                 .map(recolteMapper::toDtoData)
                 .collect(Collectors.toList());
     }

@@ -11,10 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -72,9 +74,11 @@ public class VenteController {
     }
 
 
-    @GetMapping("/vente-data")
-    public ResponseEntity<List<VenteData>> getDataFerme() {
+    @GetMapping("/vente-data/{nom}")
+    public ResponseEntity<List<VenteData>> getDataFerme(@PathVariable String nom) {
         log.info("Récupération des données de récolte par ferme");
-        return ResponseEntity.ok(venteInterface.dataVente());
+        return ResponseEntity.ok(venteInterface.dataVente(nom));
     }
+
+
 }

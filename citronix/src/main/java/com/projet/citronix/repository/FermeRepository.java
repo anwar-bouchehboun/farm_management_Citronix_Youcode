@@ -29,4 +29,6 @@ public interface FermeRepository extends JpaRepository<Ferme, Long> {
             @Param("localisation") String localisation,
             @Param("superficie") Double superficie
     );
+
+    List<Ferme> findByNom(String nom);
 }

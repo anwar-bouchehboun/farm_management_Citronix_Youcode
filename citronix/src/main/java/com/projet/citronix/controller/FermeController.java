@@ -93,4 +93,21 @@ public class FermeController {
         
         return ResponseEntity.ok(fermeService.rechercherFermes(nom, dateCreation, localisation, superficie));
     }
+
+    @GetMapping("/saison")
+    public ResponseEntity<List<FermeData>> getFermesWithSpringHarvest() {
+        log.info("Récupération des fermes avec récolte au printemps");
+        return ResponseEntity.ok(fermeService.fermeGetAll());
+    }
+
+    @GetMapping("/old")
+    public ResponseEntity<List<FermeData>> getFermesWithOneChampAndOldTrees() {
+        log.info("Récupération des fermes avec un champ et des arbres centenaires");
+        return ResponseEntity.ok(fermeService.getFermesWithOldTrees());
+    }
+
+    @GetMapping("/groupee")
+    public ResponseEntity<Map<Double, List<FermeData>>> getFermesGroupeesByQuantite() {
+        return ResponseEntity.ok(fermeService.getFermestih());
+    }
 }

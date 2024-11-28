@@ -1,10 +1,13 @@
 package com.projet.citronix.service.impl;
 
+import com.fasterxml.classmate.AnnotationOverrides.StdImpl;
 import com.projet.citronix.dto.VenteDto;
 import com.projet.citronix.dto.response.RecolteData;
 import com.projet.citronix.dto.response.VenteData;
+import com.projet.citronix.entity.Ferme;
 import com.projet.citronix.entity.Recolte;
 import com.projet.citronix.entity.Vente;
+import com.projet.citronix.enums.Saison;
 import com.projet.citronix.exception.NotFoundExceptionHndler;
 import com.projet.citronix.exception.ValidationException;
 import com.projet.citronix.mapper.VenteMapper;
@@ -18,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -138,21 +142,39 @@ public class VenteService  implements VenteInterface {
     }
 
 
-    public List<VenteData> dataVente(){
-        return fermeRepository.findAll()
+    public List<VenteData> dataVente(String nom){
+     /*   return fermeRepository.findAll()
                 .stream()
+                .filter(ferme -> ferme.getId()==id)
                 .flatMap(ferme -> ferme.getChamps().stream())
                 .flatMap(champ -> champ.getArbres().stream())
                 .flatMap(arbre -> arbre.getDetails().stream())
                 .map(detailRecolte -> detailRecolte.getRecolte())
                 .distinct()
-                .filter(recolte -> recolte.getId()!=null)
+                .filter(recolte ->  recolte.getSaison()== Saison.ETE)
                 .flatMap(recolte -> recolte.getVentes().stream())
                 .filter(vente -> vente.getId()!=null)
                 .map(venteMapper::ventData)
                 .collect(Collectors.toList());
+
+      */
+        List<Ferme> fermes=fermeRepository.findByNom(nom);
+        return fermes.stream().
+                flatMap(ferme -> ferme.getChamps().stream())
+                .flatMap(champ -> champ.getArbres().stream())
+                .flatMap(arbre -> arbre.getDetails().stream())
+                .flatMap(detailRecolte -> detailRecolte.getRecolte().getVentes().stream())
+                .filter(detailRecolte -> detailRecolte.getRecolte().getSaison()==Saison.ETE)
+        .map(venteMapper::ventData).collect(Collectors.toList());
     }
 
-
+    public List<VenteData> getVentesApresDate(LocalDate date) {
+        List<Recolte> recoltes = recolteRepository.findByDateRecolteAfter(date);
+        
+        return recoltes.stream()
+            .flatMap(recolte -> recolte.getVentes().stream())
+            .map(venteMapper::ventData)
+            .collect(Collectors.toList());
+    }
 
 }

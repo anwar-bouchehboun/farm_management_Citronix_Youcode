@@ -104,7 +104,7 @@ public class ArbreService implements ArbreInterface {
 
     private void validateDensiteArbres(Champ champ) {
         if (champ.getArbres() != null) {
-            double maxArbres = champ.getSuperficie() * 100; // 100 arbres par hectare
+            double maxArbres = champ.getSuperficie() * 100;
             if (champ.getArbres().size() >= maxArbres) {
                 throw new ValidationException(String.format(
                     "Densité maximale atteinte (%d arbres pour %.2f hectares)", 
@@ -170,4 +170,16 @@ public class ArbreService implements ArbreInterface {
     }
 
     */
+
+
+    public List<ArbreData> get(){
+        return arbreRepository.findAll()
+                .stream()
+                .filter(arbre -> arbre.getDetails().stream()
+                        .anyMatch(detailRecolte -> detailRecolte.getQuantiteParArbre()==100))
+                .map(arbreMapper::arbreToData)
+                .collect(Collectors.toList());
+
+
+    }
 }

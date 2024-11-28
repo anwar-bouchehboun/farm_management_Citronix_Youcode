@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${DB_URL_Prod}
-    username: ${DB_USERNAME_Prod}
-    password: ${DB_PASSWORD_Prod}
+    url: jdbc:postgresql://localhost:5432/citronix
+    username: postgres
+    password: 2024
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true

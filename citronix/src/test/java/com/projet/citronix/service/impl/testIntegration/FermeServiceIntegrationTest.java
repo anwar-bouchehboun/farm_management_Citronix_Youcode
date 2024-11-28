@@ -53,7 +53,7 @@ public class FermeServiceIntegrationTest {
         FermeDto fermeDto = FermeDto.builder()
                 .nom("Ferme Test")
                 .localisation("Location Test")
-                .superficie(0.1)
+                .superficie(0.01)
                 .dateCreation(LocalDate.now())
                 .build();
 
